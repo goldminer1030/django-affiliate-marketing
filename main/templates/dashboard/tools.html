@@ -1,0 +1,17 @@
+{% extends "dashboard/layout.html" %}
+
+{% load static %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block sidebar %}
+{% include "dashboard/include/sidebar.html" with active='Tools' %}
+{% endblock %}
+
+{% block content-header %}
+  {% include "dashboard/include/content-header.html" with header='Tools' %}
+{% endblock %}
+
+{% block content %}
+<p>This is Tools page</p>
+{% endblock content %}

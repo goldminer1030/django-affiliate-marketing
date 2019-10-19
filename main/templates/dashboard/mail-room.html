@@ -1,0 +1,17 @@
+{% extends "dashboard/layout.html" %}
+
+{% load static %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block sidebar %}
+{% include "dashboard/include/sidebar.html" with active='Mail room' %}
+{% endblock %}
+
+{% block content-header %}
+  {% include "dashboard/include/content-header.html" with header='Mail room' %}
+{% endblock %}
+
+{% block content %}
+<p>This is Mail Room page</p>
+{% endblock content %}

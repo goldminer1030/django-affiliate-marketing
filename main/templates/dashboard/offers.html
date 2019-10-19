@@ -1,0 +1,17 @@
+{% extends "dashboard/layout.html" %}
+
+{% load static %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block sidebar %}
+{% include "dashboard/include/sidebar.html" with active='Offers' %}
+{% endblock %}
+
+{% block content-header %}
+  {% include "dashboard/include/content-header.html" with header='Offers' %}
+{% endblock %}
+
+{% block content %}
+<p>This is Offers page</p>
+{% endblock content %}

@@ -1,0 +1,17 @@
+{% extends "dashboard/layout.html" %}
+
+{% load static %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block sidebar %}
+{% include "dashboard/include/sidebar.html" with active='Dashboard' %}
+{% endblock %}
+
+{% block content-header %}
+  {% include "dashboard/include/content-header.html" with header='Dashboard' %}
+{% endblock %}
+
+{% block content %}
+<p>This is Dashboard page</p>
+{% endblock content %}

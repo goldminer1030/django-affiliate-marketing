@@ -1,0 +1,17 @@
+{% extends "dashboard/layout.html" %}
+
+{% load static %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block sidebar %}
+{% include "dashboard/include/sidebar.html" with active='Finances' %}
+{% endblock %}
+
+{% block content-header %}
+  {% include "dashboard/include/content-header.html" with header='Finances' %}
+{% endblock %}
+
+{% block content %}
+<p>This is Finances page</p>
+{% endblock content %}
