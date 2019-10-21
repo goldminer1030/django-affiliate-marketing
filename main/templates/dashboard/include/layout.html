@@ -44,7 +44,7 @@
                 <div class="media">
                   <img src="{% static 'img/user1-128x128.jpg' %}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
                   <div class="media-body">
-                    <h3 class="dropdown-item-title">{{ user.get_full_name }}</h3>
+                    <h3 class="dropdown-item-title">{{ user.get_full_name|default:"No Name" }}</h3>
                     <p class="text-sm">{{ user.email }}</p>
                   </div>
                 </div>
