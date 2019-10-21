@@ -36,24 +36,25 @@
           <a class="nav-link" data-toggle="dropdown" href="#">
             <i class="far fa-user"></i>
           </a>
-          <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
-            <a href="#" class="dropdown-item">
-              <!-- Message Start -->
-              <div class="media">
-                <img src="{% static 'img/user1-128x128.jpg' %}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
-                <div class="media-body">
-                  <h3 class="dropdown-item-title">
-                    Brad Diesel
-                  </h3>
-                  <p class="text-sm">Administrator</p>
-                  <p class="text-sm text-muted"><i class="far fa-clock mr-1"></i> 4 Hours Ago</p>
+
+          {% if user.is_authenticated %}
+            <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+              <a href="#" class="dropdown-item">
+                <!-- Message Start -->
+                <div class="media">
+                  <img src="{% static 'img/user1-128x128.jpg' %}" alt="User Avatar" class="img-size-50 mr-3 img-circle">
+                  <div class="media-body">
+                    <h3 class="dropdown-item-title">{{ user.get_full_name }}</h3>
+                    <p class="text-sm">{{ user.email }}</p>
+                  </div>
                 </div>
-              </div>
-              <!-- Message End -->
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="{% url 'profiles:auth_logout' %}" class="dropdown-item dropdown-footer">Log Out</a>
-          </div>
+                <!-- Message End -->
+              </a>
+              <div class="dropdown-divider"></div>
+              <a href="{% url 'profiles:auth_logout' %}" class="dropdown-item dropdown-footer">Log Out</a>
+            </div>
+          {% endif %}
+
         </li>
       </ul>
     </nav>

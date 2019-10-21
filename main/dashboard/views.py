@@ -1,19 +1,18 @@
 from django.shortcuts import render
 from django.views.generic.edit import CreateView
+from django.views.generic.list import ListView
 from common.mixins import LoginRequiredMixin
+from profiles.models import User
 
 
-class DashboardView(LoginRequiredMixin, CreateView):
+class DashboardView(LoginRequiredMixin, ListView):
     success_url = '/dashboard/'
     template_name = 'dashboard/overview.html'
+    model = User
+    context_object_name = 'users'
 
-    def get(self, request, *args, **kwargs):
-        context = {}
-        return render(request, self.template_name, context)
-
-    def get_context_data(self, **kwargs):
-        context = super(DashboardView, self).get_context_data(**kwargs)
-        return context
+    def get_queryset(self):
+        return User.objects.all()
 
 
 class OffersView(LoginRequiredMixin, CreateView):
