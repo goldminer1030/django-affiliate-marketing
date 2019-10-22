@@ -54,12 +54,16 @@ class User(AbstractBaseUser):
     )
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
 
+    first_name = models.CharField(_('first name'), max_length=30, blank=True)
+    last_name = models.CharField(_('last name'), max_length=30, blank=True)
+
     USERNAME_FIELD = 'email'
     objects = UserManager()
 
     class Meta:
         verbose_name = _('user')
         verbose_name_plural = _('users')
+        ordering = ['-id']
 
     def _get_name(self):
         profile = self.profile
@@ -70,20 +74,10 @@ class User(AbstractBaseUser):
             return None
 
     def get_full_name(self):
-        n = self._get_name()
-        if n:
-            full_name = u"{0} {1}".format(n.get("first"), n.get("last")).strip()
-        else:
-            full_name = None
-        return full_name or self.email
+        return u"{0} {1}".format(self.first_name, self.last_name).strip() or self.email
 
     def get_short_name(self):
-        n = self._get_name()
-        if n:
-            first_name = n.get("first", "").strip()
-        else:
-            first_name = None
-        return first_name or self.email.split('@')[0]
+        return self.first_name or self.email.split('@')[0]
 
     def has_perm(self, perm, obj=None):
         return True

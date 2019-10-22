@@ -1,4 +1,4 @@
-{% load i18n static %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,13 +13,14 @@
   <link href="{% static 'plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css' %}" rel="stylesheet" type="text/css" />
   <link href="{% static 'plugins/icheck-bootstrap/icheck-bootstrap.min.css' %}" rel="stylesheet" type="text/css" />
 
+  {% block extrastyle %}{% endblock %}
+
   <link href="{% static 'plugins/adminlte/css/adminlte.min.css' %}" rel="stylesheet" type="text/css" />
 
-  {% block extrastyle %}{% endblock %}
   {% block extrahead %}{% endblock %}
 
 </head>
-{% load i18n %}
+
 
 <body class="layout-top-nav" style="height: auto;">
   <div class="wrapper">

@@ -139,5 +139,3 @@ AUTH_USER_MODEL = 'profiles.User'
 LOGIN_URL = 'profiles:auth_login'
 LOGIN_REDIRECT_URL = 'dashboard:dashboard'
 LOGOUT_REDIRECT_URL = LOGIN_URL
-
-ALLOWED_HOSTS = ['*', 'localhost', '127.0.0.1']
