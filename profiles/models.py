@@ -1,8 +1,10 @@
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.core.mail import send_mail
 from django.db import models
+from django.db.models import Sum
 from django.utils import timezone
 from django.utils.translation import ugettext as _
+from dashboard.models import Earnings
 
 
 class UserManager(BaseUserManager):
@@ -75,6 +77,9 @@ class User(AbstractBaseUser):
 
     def get_full_name(self):
         return u"{0} {1}".format(self.first_name, self.last_name).strip() or self.email
+
+    def get_balance(self):
+        return Earnings.objects.filter(customer=self).aggregate(Sum('money'))['money__sum']
 
     def get_short_name(self):
         return self.first_name or self.email.split('@')[0]
