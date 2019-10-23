@@ -27,7 +27,6 @@
             <th>Hits</th>
             <th>Leads</th>
             <th>Money</th>
-{#            <th>Action</th>#}
           </tr>
           </thead>
           <tbody>
@@ -36,9 +35,7 @@
               <td>{{ earning.earning_date }}</td>
               <td>{{ earning.hits }}</td>
               <td>{{ earning.leads }}</td>
-              <td>{{ earning.money }}</td>
-{#              <td><a href="{% url 'dashboard:earning-delete' earning.id user.pk %}" onclick="return confirm('Are you sure?');"#}
-{#                       class="btn btn-block btn-danger">Delete</a></td>#}
+              <td>$ {{ earning.money }}</td>
             </tr>
           {% endfor %}
           </tbody>

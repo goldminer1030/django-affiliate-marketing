@@ -26,15 +26,14 @@
               <thead>
               <tr>
                 <th>Smart Link</th>
-{#                <th>Action</th>#}
               </tr>
               </thead>
               <tbody>
               {% for smart_link in smart_links %}
                 <tr>
-                  <td>{{ smart_link.smart_link }}</td>
-{#                  <td><a href="{% url 'dashboard:link-delete' smart_link.id %}" onclick="return confirm('Are you sure?');"#}
-{#                         class="btn btn-block btn-danger">Delete</a></td>#}
+                  <td>
+                    <a href="{{ smart_link.smart_link }}" target="_blank">{{ smart_link.smart_link }}</a>
+                  </td>
                 </tr>
               {% endfor %}
               </tbody>

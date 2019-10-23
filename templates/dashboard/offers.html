@@ -73,7 +73,9 @@
               {% for smart_link in smart_links %}
                 <tr>
                   <td>{{ smart_link.customer.email }}</td>
-                  <td>{{ smart_link.smart_link }}</td>
+                  <td>
+                    <a href="{{ smart_link.smart_link }}" target="_blank">{{ smart_link.smart_link }}</a>
+                  </td>
                   <td><a href="{% url 'dashboard:link-delete' smart_link.id %}" onclick="return confirm('Are you sure?');"
                          class="btn btn-block btn-danger">Delete</a></td>
                 </tr>

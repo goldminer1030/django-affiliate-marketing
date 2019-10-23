@@ -28,7 +28,6 @@
             <th>Type</th>
             <th>Amounts</th>
             <th>Status</th>
-{#            <th>Action</th>#}
           </tr>
           </thead>
           <tbody>
@@ -37,12 +36,10 @@
               <td>{{ payment.invoice_id }}</td>
               <td>{{ payment.payment_date }}</td>
               <td>{{ payment.type }}</td>
-              <td>{{ payment.amount }}</td>
+              <td>$ {{ payment.amount }}</td>
               <td>
                 <span class="badge {% if payment.status == 'paid' %}badge-info{% else %}badge-danger{% endif %}">{{ payment.status }}</span>
               </td>
-{#              <td><a href="{% url 'dashboard:payment-delete' payment.id user.pk %}" onclick="return confirm('Are you sure?');"#}
-{#                       class="btn btn-block btn-danger">Delete</a></td>#}
             </tr>
           {% endfor %}
           </tbody>

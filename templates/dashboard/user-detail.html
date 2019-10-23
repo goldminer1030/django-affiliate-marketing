@@ -115,7 +115,7 @@
                   <td>{{ earning.earning_date }}</td>
                   <td>{{ earning.hits }}</td>
                   <td>{{ earning.leads }}</td>
-                  <td>{{ earning.money }}</td>
+                  <td>$ {{ earning.money }}</td>
                   <td><a href="{% url 'dashboard:earning-delete' earning.id customer.pk %}" onclick="return confirm('Are you sure?');"
                            class="btn btn-block btn-danger">Delete</a></td>
                 </tr>
@@ -188,7 +188,7 @@
                   <td>{{ payment.invoice_id }}</td>
                   <td>{{ payment.payment_date }}</td>
                   <td>{{ payment.type }}</td>
-                  <td>{{ payment.amount }}</td>
+                  <td>$ {{ payment.amount }}</td>
                   <td>
                     <span class="badge {% if payment.status == 'paid' %}badge-info{% else %}badge-danger{% endif %}">{{ payment.status }}</span>
                   </td>
