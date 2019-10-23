@@ -1,4 +1,4 @@
-from django.views.generic import CreateView, DeleteView
+from django.views.generic import CreateView
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib import messages

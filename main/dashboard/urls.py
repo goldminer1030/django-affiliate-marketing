@@ -1,5 +1,7 @@
 from django.urls import path
-from .views import DashboardView, OffersView, AffiliatesView, FinancesView, MailRoomView, ToolsView, AdministrationView
+from .views import DashboardView, OffersView, AffiliatesView, FinancesView, MailRoomView, ToolsView, \
+    AdministrationView, delete_smart_link
+
 
 app_name = 'dashboard'
 
@@ -11,4 +13,5 @@ urlpatterns = [
     path('mail-room/', MailRoomView.as_view(), name='mail-room'),
     path('tools/', ToolsView.as_view(), name='tools'),
     path('administration/', AdministrationView.as_view(), name='administration'),
+    path('link/<int:pk>/delete', delete_smart_link, name='link-delete'),
 ]

@@ -42,3 +42,6 @@ class Payments(models.Model):
 class SmartLinks(models.Model):
     customer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='smartlinks')
     smart_link = models.CharField(_('Smart Link'), max_length=255)
+
+    class Meta:
+        ordering = ['-id']

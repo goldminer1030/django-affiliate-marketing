@@ -1,8 +1,10 @@
-from django.shortcuts import render
 from django.views.generic.edit import CreateView, FormMixin
 from django.views.generic.list import ListView
 from django.contrib import messages
+from django.shortcuts import redirect
 from common.mixins import LoginRequiredMixin
+from .models import SmartLinks
+from .forms import SmartLinksForm
 from profiles.models import User
 from profiles.forms import SignUpForm
 
@@ -17,17 +19,41 @@ class DashboardView(LoginRequiredMixin, ListView):
         return User.objects.exclude(email=self.request.user.email)
 
 
-class OffersView(LoginRequiredMixin, CreateView):
+class OffersView(LoginRequiredMixin, FormMixin, ListView):
     success_url = '/dashboard/offers/'
     template_name = 'dashboard/offers.html'
+    model = SmartLinks
+    context_object_name = 'smart_links'
+    paginate_by = 10
 
-    def get(self, request, *args, **kwargs):
-        context = {}
-        return render(request, self.template_name, context)
+    # form mixin
+    form_class = SmartLinksForm
 
-    def get_context_data(self, **kwargs):
-        context = super(OffersView, self).get_context_data(**kwargs)
-        return context
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        try:
+            form.save()
+            messages.success(self.request, 'Added a new smart link successfully.')
+        except Exception as e:
+            messages.error(self.request, 'Unfortunately failed')
+        return super(OffersView, self).form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, form.errors)
+        return super(OffersView, self).form_valid(form)
+
+
+def delete_smart_link(request, pk):
+    smart_link = SmartLinks.objects.get(id=pk)
+    smart_link.delete()
+    messages.success(request, 'Removed a smart link successfully.')
+    return redirect("dashboard:offers")
 
 
 class AffiliatesView(LoginRequiredMixin, FormMixin, ListView):
