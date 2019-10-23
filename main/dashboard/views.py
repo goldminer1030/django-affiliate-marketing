@@ -1,10 +1,12 @@
-from django.views.generic.edit import CreateView, FormMixin
+from django.views.generic.edit import CreateView, FormMixin, FormView
+from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
 from django.contrib import messages
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from common.mixins import LoginRequiredMixin
-from .models import SmartLinks
-from .forms import SmartLinksForm
+from .models import SmartLinks, Earnings, Payments
+from .forms import SmartLinksForm, EarningsForm, PaymentsForm
 from profiles.models import User
 from profiles.forms import SignUpForm
 
@@ -17,6 +19,53 @@ class DashboardView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return User.objects.exclude(email=self.request.user.email)
+
+
+class UserDetailView(LoginRequiredMixin, TemplateView):
+    template_name = 'dashboard/user-detail.html'
+
+    def get(self, request, *args, **kwargs):
+        customer = User.objects.get(pk=self.kwargs.get('pk'))
+
+        context = self.get_context_data(**kwargs)
+        context['user'] = customer
+        context['earnings'] = Earnings.objects.filter(customer=customer)
+        context['payments'] = Payments.objects.filter(customer=customer)
+        context['smart_links'] = SmartLinks.objects.filter(customer=customer)
+        context['earnings_form'] = EarningsForm(self.request.GET or None)
+        context['payments_form'] = PaymentsForm(self.request.GET or None)
+
+        return self.render_to_response(context)
+
+
+class NewEarningView(FormView):
+    form_class = EarningsForm
+    template_name = 'dashboard/user-detail.html'
+
+    def post(self, request, *args, **kwargs):
+        earnings_form = self.form_class(request.POST)
+        if earnings_form.is_valid():
+            earnings_form.save()
+            messages.success(self.request, 'Added a new earning successfully.')
+        else:
+            messages.error(self.request, earnings_form.errors)
+
+        return redirect(reverse_lazy('dashboard:user-detail', kwargs={'pk': request.POST.get('customer')}))
+
+
+class NewPaymentView(FormView):
+    form_class = PaymentsForm
+    template_name = 'dashboard/user-detail.html'
+
+    def post(self, request, *args, **kwargs):
+        payment_form = self.form_class(request.POST)
+        if payment_form.is_valid():
+            payment_form.save()
+            messages.success(self.request, 'Added a new payment successfully.')
+        else:
+            messages.error(self.request, payment_form.errors)
+
+        return redirect(reverse_lazy('dashboard:user-detail', kwargs={'pk': request.POST.get('customer')}))
 
 
 class OffersView(LoginRequiredMixin, FormMixin, ListView):
@@ -54,6 +103,20 @@ def delete_smart_link(request, pk):
     smart_link.delete()
     messages.success(request, 'Removed a smart link successfully.')
     return redirect("dashboard:offers")
+
+
+def earning_link(request, pk, slug):
+    earning = Earnings.objects.get(id=pk)
+    earning.delete()
+    messages.success(request, 'Removed an earning successfully.')
+    return redirect(reverse_lazy('dashboard:user-detail', kwargs={'pk': slug}))
+
+
+def payment_link(request, pk, slug):
+    payment = Payments.objects.get(id=pk)
+    payment.delete()
+    messages.success(request, 'Removed a payment successfully.')
+    return redirect(reverse_lazy('dashboard:user-detail', kwargs={'pk': slug}))
 
 
 class AffiliatesView(LoginRequiredMixin, FormMixin, ListView):

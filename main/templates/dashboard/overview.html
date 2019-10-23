@@ -19,7 +19,7 @@
       {% if forloop.first %}<div class="row">{% endif %}
       <div class="col-lg-4 col-md-6 col-sm-12">
         <div class="info-box">
-          <a href="#" class="info-box-icon bg-info"><i class="far fa-user"></i></a>
+          <a href="{% url 'dashboard:user-detail' user.id %}" class="info-box-icon bg-info"><i class="far fa-user"></i></a>
 
           <div class="info-box-content">
             <span class="info-box-text">{{ user.get_full_name|default:"No Name" }}</span>

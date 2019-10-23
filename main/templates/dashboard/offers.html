@@ -17,10 +17,6 @@
 {% endblock %}
 
 {% block content %}
-  <div class="text-right">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-new-link">Create New Link</button>
-  </div>
-  <br>
   <div class="modal fade" id="modal-new-link">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -32,7 +28,7 @@
             </button>
           </div>
           <div class="modal-body">
-            {{ form.as_p }}
+            {% include 'dashboard/include/bs4_form.html' with form=form %}
           </div>
           <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -48,12 +44,25 @@
 
   {% if smart_links %}
     <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Smart Links</h3>
+
+        <div class="card-tools">
+          <ul class="pagination pagination-sm float-right">
+            <li class="page-item">
+              <a class="page-link" href="#" data-toggle="modal" data-target="#modal-new-link">
+                <i class="fa fa-plus"></i> New
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
       <!-- /.card-header -->
       <div class="card-body">
         <div class="dataTables_wrapper dt-bootstrap4">
           <div class="row">
             <div class="col-sm-12">
-              <table id="users-table" class="table table-bordered table-hover">
+              <table id="smart-links-table" class="table table-bordered table-hover">
                 <thead>
                 <tr>
                   <th>User</th>

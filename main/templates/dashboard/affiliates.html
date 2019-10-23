@@ -17,10 +17,6 @@
 {% endblock %}
 
 {% block content %}
-  <div class="text-right">
-    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modal-new-user">Create New User</button>
-  </div>
-  <br>
   <div class="modal fade" id="modal-new-user">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
@@ -32,22 +28,7 @@
             </button>
           </div>
           <div class="modal-body">
-            <div class="form-group">
-              <label for="email">Email address</label>
-              <input type="email" class="form-control" name="email" id="email" placeholder="Enter email">
-            </div>
-            <div class="form-group">
-              <label for="password">Password</label>
-              <input type="password" class="form-control" name="password" id="password" placeholder="Password">
-            </div>
-            <div class="form-group">
-              <label for="first_name">First Name</label>
-              <input type="text" class="form-control" name="first_name" id="first_name" placeholder="First Name">
-            </div>
-            <div class="form-group">
-              <label for="last_name">Last Name</label>
-              <input type="text" class="form-control" name="last_name" id="last_name" placeholder="Last Name">
-            </div>
+            {% include 'dashboard/include/bs4_form.html' with form=form %}
           </div>
           <div class="modal-footer justify-content-between">
             <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
@@ -63,7 +44,21 @@
 
   {% if users %}
     <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">Affiliates</h3>
+
+        <div class="card-tools">
+          <ul class="pagination pagination-sm float-right">
+            <li class="page-item">
+              <a class="page-link" href="#" data-toggle="modal" data-target="#modal-new-user">
+                <i class="fa fa-plus"></i> New
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
       <!-- /.card-header -->
+
       <div class="card-body">
         <div class="dataTables_wrapper dt-bootstrap4">
           <div class="row">

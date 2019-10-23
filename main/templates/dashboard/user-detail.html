@@ -1,0 +1,251 @@
+{% extends "dashboard/include/layout.html" %}
+
+{% load static %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block sidebar %}
+{% include "dashboard/include/sidebar.html" with active='Dashboard' %}
+{% endblock %}
+
+{% block content-header %}
+  {% include "dashboard/include/content-header.html" with header='Dashboard' %}
+{% endblock %}
+
+{% block content %}
+  {% if user %}
+    <div class="row">
+      <div class="card card-widget widget-user" style="width: 100%;">
+        <!-- Add the bg color to the header using any of the bg-* classes -->
+        <div class="widget-user-header bg-info">
+          <h3 class="widget-user-username">{{ user.get_full_name|default:"No Name" }}</h3>
+          <h5 class="widget-user-desc">{{ user.email }}</h5>
+        </div>
+        <div class="widget-user-image">
+          <img class="img-circle elevation-2" src="{% static 'img/user1-128x128.jpg' %}" alt="User Avatar">
+        </div>
+        <div class="card-footer">
+          <div class="row">
+            <div class="col-sm-4 border-right">
+              <div class="description-block">
+                <h5 class="description-header">{% if earnings %}{{ earnings|length }}{% else %}0{% endif %}</h5>
+                <span class="description-text">Earnings</span>
+              </div>
+              <!-- /.description-block -->
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-4 border-right">
+              <div class="description-block">
+                <h5 class="description-header">{% if payments %}{{ payments|length }}{% else %}0{% endif %}</h5>
+                <span class="description-text">Payments</span>
+              </div>
+              <!-- /.description-block -->
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-4">
+              <div class="description-block">
+                <h5 class="description-header">{% if smart_links %}{{ smart_links|length }}{% else %}0{% endif %}</h5>
+                <span class="description-text">Smart Links</span>
+              </div>
+              <!-- /.description-block -->
+            </div>
+            <!-- /.col -->
+          </div>
+          <!-- /.row -->
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="modal fade" id="modal-new-earning">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <form action="{% url 'dashboard:new-earning' %}" method="post" role="form">{% csrf_token %}
+              <div class="modal-header">
+                <h4 class="modal-title">New Earning</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                {% include 'dashboard/include/bs4_form.html' with form=earnings_form %}
+              </div>
+              <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Create</button>
+              </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+
+      <div class="card" style="width: 100%;">
+        <div class="card-header">
+          <h3 class="card-title">Earnings</h3>
+
+          <div class="card-tools">
+            <ul class="pagination pagination-sm float-right">
+              <li class="page-item">
+                <a class="page-link" href="#" data-toggle="modal" data-target="#modal-new-earning">
+                  <i class="fa fa-plus"></i> New
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+          <div class="dataTables_wrapper dt-bootstrap4">
+            <table id="earnings-table" class="table table-bordered table-hover">
+              <thead>
+              <tr>
+                <th>Date</th>
+                <th>Hits</th>
+                <th>Leads</th>
+                <th>Money</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for earning in earnings %}
+                <tr>
+                  <td>{{ earning.earning_date }}</td>
+                  <td>{{ earning.hits }}</td>
+                  <td>{{ earning.leads }}</td>
+                  <td>{{ earning.money }}</td>
+                  <td><a href="{% url 'dashboard:earning-delete' earning.id user.pk %}" onclick="return confirm('Are you sure?');"
+                           class="btn btn-block btn-danger">Delete</a></td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- /.card-body -->
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="modal fade" id="modal-new-payment">
+        <div class="modal-dialog modal-lg">
+          <div class="modal-content">
+            <form action="{% url 'dashboard:new-payment' %}" method="post" role="form">{% csrf_token %}
+              <div class="modal-header">
+                <h4 class="modal-title">New Payment</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                {% include 'dashboard/include/bs4_form.html' with form=payments_form %}
+              </div>
+              <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+                <button type="submit" class="btn btn-primary">Create</button>
+              </div>
+            </form>
+          </div>
+          <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+      </div>
+      <!-- /.modal -->
+
+      <div class="card" style="width: 100%;">
+        <div class="card-header">
+          <h3 class="card-title">Payments</h3>
+
+          <div class="card-tools">
+            <ul class="pagination pagination-sm float-right">
+              <li class="page-item">
+                <a class="page-link" href="#" data-toggle="modal" data-target="#modal-new-payment">
+                  <i class="fa fa-plus"></i> New
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+          <div class="dataTables_wrapper dt-bootstrap4">
+            <table id="payments-table" class="table table-bordered table-hover">
+              <thead>
+              <tr>
+                <th>Invoice ID</th>
+                <th>Date</th>
+                <th>Type</th>
+                <th>Amounts</th>
+                <th>Status</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for payment in payments %}
+                <tr>
+                  <td>{{ payment.invoice_id }}</td>
+                  <td>{{ payment.payment_date }}</td>
+                  <td>{{ payment.type }}</td>
+                  <td>{{ payment.amount }}</td>
+                  <td>
+                    <span class="badge {% if payment.status == 'paid' %}badge-info{% else %}badge-danger{% endif %}">{{ payment.status }}</span>
+                  </td>
+                  <td><a href="{% url 'dashboard:payment-delete' payment.id user.pk %}" onclick="return confirm('Are you sure?');"
+                           class="btn btn-block btn-danger">Delete</a></td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- /.card-body -->
+      </div>
+    </div>
+  {% endif %}
+{% endblock content %}
+
+{% block sub_extra_script %}
+  <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
+  <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
+  <script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
+  <script>
+    $(function () {
+      $('#earnings-table').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+      });
+      $('#payments-table').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+      });
+      $('#id_earning_date').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:ss'
+      })
+      $('#id_payment_date').datetimepicker({
+        format: 'YYYY-MM-DD HH:mm:ss'
+      })
+    });
+  </script>
+
+  {% for message in messages %}
+    {% if message.tags == "info" %}
+        <script> toastr.info('{{message}}')</script>
+    {% elif message.tags == "error" %}
+        <script> toastr.error('{{message}}')</script>
+    {% elif message.tags == "warning" %}
+        <script> toastr.warning('{{message}}')</script>
+    {% elif message.tags == "success" %}
+        <script> toastr.success('{{message}}')</script>
+    {% endif %}
+  {% endfor %}
+{% endblock %}
