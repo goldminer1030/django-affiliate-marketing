@@ -1,0 +1,55 @@
+.section-hero {
+  position: relative;
+  background-image: url("../img/image01.jpg");
+  height: 875px;
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+.section-titles-wrapper,
+.section-banner .banner-texts .banner-title-wrapper {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+.big-title {
+  font-size: 3.7em;
+}
+h3.small-title {
+  font-size: 2em;
+}
+h4.small-title {
+  font-size: 1.7em;
+}
+.section-banner .banner-image {
+  background-image: url("../img/image03.jpg");
+  min-height: 670px;
+}
+.section-banner .banner-texts {
+  position: relative;
+}
+.section-parallax {
+  position: relative;
+  background-image: url("../img/image02.jpg");
+  height: 875px;
+
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.btn-join {
+  display: inline-block;
+  margin-top: 20px;
+  font-size: 1.7em;
+  color: black;
+  border: 1px solid;
+  border-radius: 5px;
+  padding: 2px 20px;
+}
+.btn-join .btn-light-color {
+  color: white;
+}
