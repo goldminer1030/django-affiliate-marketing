@@ -8,7 +8,7 @@ from common.mixins import LoginRequiredMixin
 from .models import SmartLinks, Earnings, Payments
 from .forms import SmartLinksForm, EarningsForm, PaymentsForm
 from profiles.models import User
-from profiles.forms import SignUpForm
+from profiles.forms import NewUserForm
 
 
 class DashboardView(LoginRequiredMixin, ListView):
@@ -127,7 +127,7 @@ class AffiliatesView(LoginRequiredMixin, FormMixin, ListView):
     paginate_by = 10
 
     # form mixin
-    form_class = SignUpForm
+    form_class = NewUserForm
 
     def get_queryset(self):
         return User.objects.exclude(email=self.request.user.email)

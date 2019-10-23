@@ -48,8 +48,8 @@ class User(AbstractBaseUser):
     )
 
     is_superuser = models.BooleanField(
-        _('superuser status'),
-        default=False,
+        _('Is superuser?'),
+        default=True,
         help_text=_('Designates that this user has all permissions without explicitly assigning them.')
     )
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)
