@@ -42,52 +42,50 @@
   </div>
   <!-- /.modal -->
 
-  {% if smart_links %}
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">Smart Links</h3>
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Smart Links</h3>
 
-        <div class="card-tools">
-          <ul class="pagination pagination-sm float-right">
-            <li class="page-item">
-              <a class="page-link" href="#" data-toggle="modal" data-target="#modal-new-link">
-                <i class="fa fa-plus"></i> New
-              </a>
-            </li>
-          </ul>
-        </div>
+      <div class="card-tools">
+        <ul class="pagination pagination-sm float-right">
+          <li class="page-item">
+            <a class="page-link" href="#" data-toggle="modal" data-target="#modal-new-link">
+              <i class="fa fa-plus"></i> New
+            </a>
+          </li>
+        </ul>
       </div>
-      <!-- /.card-header -->
-      <div class="card-body">
-        <div class="dataTables_wrapper dt-bootstrap4">
-          <div class="row">
-            <div class="col-sm-12">
-              <table id="smart-links-table" class="table table-bordered table-hover">
-                <thead>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+      <div class="dataTables_wrapper dt-bootstrap4">
+        <div class="row">
+          <div class="col-sm-12">
+            <table id="smart-links-table" class="table table-bordered table-hover">
+              <thead>
+              <tr>
+                <th>User</th>
+                <th>Smart Link</th>
+                <th>Action</th>
+              </tr>
+              </thead>
+              <tbody>
+              {% for smart_link in smart_links %}
                 <tr>
-                  <th>User</th>
-                  <th>Smart Link</th>
-                  <th>Action</th>
+                  <td>{{ smart_link.customer.email }}</td>
+                  <td>{{ smart_link.smart_link }}</td>
+                  <td><a href="{% url 'dashboard:link-delete' smart_link.id %}" onclick="return confirm('Are you sure?');"
+                         class="btn btn-block btn-danger">Delete</a></td>
                 </tr>
-                </thead>
-                <tbody>
-                {% for smart_link in smart_links %}
-                  <tr>
-                    <td>{{ smart_link.customer.email }}</td>
-                    <td>{{ smart_link.smart_link }}</td>
-                    <td><a href="{% url 'dashboard:link-delete' smart_link.id %}" onclick="return confirm('Are you sure?');"
-                           class="btn btn-block btn-danger">Delete</a></td>
-                  </tr>
-                {% endfor %}
-                </tbody>
-              </table>
-            </div>
+              {% endfor %}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-      <!-- /.card-body -->
     </div>
-  {% endif %}
+    <!-- /.card-body -->
+</div>
 {% endblock content %}
 
 {% block sub_extra_script %}

@@ -1,0 +1,65 @@
+{% extends "dashboard/include/layout.html" %}
+
+{% load static %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block sidebar %}
+{% include "dashboard/include/sidebar.html" with active='Smart Links' %}
+{% endblock %}
+
+{% block content-header %}
+  {% include "dashboard/include/content-header.html" with header='Smart Links' %}
+{% endblock %}
+
+{% block content %}
+  <div class="card">
+    <div class="card-header">
+      <h3 class="card-title">Smart Links</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+      <div class="dataTables_wrapper dt-bootstrap4">
+        <div class="row">
+          <div class="col-sm-12">
+            <table id="smart-links-table" class="table table-bordered table-hover">
+              <thead>
+              <tr>
+                <th>Smart Link</th>
+{#                <th>Action</th>#}
+              </tr>
+              </thead>
+              <tbody>
+              {% for smart_link in smart_links %}
+                <tr>
+                  <td>{{ smart_link.smart_link }}</td>
+{#                  <td><a href="{% url 'dashboard:link-delete' smart_link.id %}" onclick="return confirm('Are you sure?');"#}
+{#                         class="btn btn-block btn-danger">Delete</a></td>#}
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- /.card-body -->
+</div>
+{% endblock content %}
+
+{% block sub_extra_script %}
+  <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
+  <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
+  <script>
+    $(function () {
+      $('#smart-links-table').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+      });
+    });
+  </script>
+{% endblock %}

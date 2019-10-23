@@ -1,0 +1,33 @@
+{% extends "dashboard/include/layout.html" %}
+
+{% load static %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block sidebar %}
+{% include "dashboard/include/sidebar.html" with active='Support' %}
+{% endblock %}
+
+{% block content-header %}
+  {% include "dashboard/include/content-header.html" with header='Support' %}
+{% endblock %}
+
+{% block content %}
+{% for user in users %}
+  {% if forloop.first %}<div class="row">{% endif %}
+  <div class="col-lg-4 col-md-6 col-sm-12">
+    <div class="info-box">
+      <span class="info-box-icon bg-info"><i class="far fa-user"></i></span>
+
+      <div class="info-box-content">
+        <span class="info-box-text">{{ user.get_full_name|default:"No Name" }}</span>
+        <span class="info-box-number">{{ user.email }}</span>
+        <span>{{ user.date_joined|timesince }}</span>
+      </div>
+    </div>
+  </div>
+  {% if forloop.counter|divisibleby:3 %}</div><div class="row">{% endif %}
+  {% if forloop.last %}</div>{% endif %}
+
+{% endfor %}
+{% endblock content %}

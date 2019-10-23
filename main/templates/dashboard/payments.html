@@ -1,0 +1,71 @@
+{% extends "dashboard/include/layout.html" %}
+
+{% load static %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block sidebar %}
+{% include "dashboard/include/sidebar.html" with active='Payments' %}
+{% endblock %}
+
+{% block content-header %}
+  {% include "dashboard/include/content-header.html" with header='Payments' %}
+{% endblock %}
+
+{% block content %}
+  <div class="card" style="width: 100%;">
+    <div class="card-header">
+      <h3 class="card-title">Payments</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+      <div class="dataTables_wrapper dt-bootstrap4">
+        <table id="payments-table" class="table table-bordered table-hover">
+          <thead>
+          <tr>
+            <th>Invoice ID</th>
+            <th>Date</th>
+            <th>Type</th>
+            <th>Amounts</th>
+            <th>Status</th>
+{#            <th>Action</th>#}
+          </tr>
+          </thead>
+          <tbody>
+          {% for payment in payments %}
+            <tr>
+              <td>{{ payment.invoice_id }}</td>
+              <td>{{ payment.payment_date }}</td>
+              <td>{{ payment.type }}</td>
+              <td>{{ payment.amount }}</td>
+              <td>
+                <span class="badge {% if payment.status == 'paid' %}badge-info{% else %}badge-danger{% endif %}">{{ payment.status }}</span>
+              </td>
+{#              <td><a href="{% url 'dashboard:payment-delete' payment.id user.pk %}" onclick="return confirm('Are you sure?');"#}
+{#                       class="btn btn-block btn-danger">Delete</a></td>#}
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- /.card-body -->
+</div>
+{% endblock content %}
+
+{% block sub_extra_script %}
+  <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
+  <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
+  <script>
+    $(function () {
+      $('#payments-table').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+      });
+    });
+  </script>
+{% endblock %}

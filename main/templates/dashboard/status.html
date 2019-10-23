@@ -1,0 +1,67 @@
+{% extends "dashboard/include/layout.html" %}
+
+{% load static %}
+
+{% block title %}Dashboard{% endblock title %}
+
+{% block sidebar %}
+{% include "dashboard/include/sidebar.html" with active='Status' %}
+{% endblock %}
+
+{% block content-header %}
+  {% include "dashboard/include/content-header.html" with header='Status' %}
+{% endblock %}
+
+{% block content %}
+  <div class="card" style="width: 100%;">
+    <div class="card-header">
+      <h3 class="card-title">Earnings</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+      <div class="dataTables_wrapper dt-bootstrap4">
+        <table id="earnings-table" class="table table-bordered table-hover">
+          <thead>
+          <tr>
+            <th>Date</th>
+            <th>Hits</th>
+            <th>Leads</th>
+            <th>Money</th>
+{#            <th>Action</th>#}
+          </tr>
+          </thead>
+          <tbody>
+          {% for earning in earnings %}
+            <tr>
+              <td>{{ earning.earning_date }}</td>
+              <td>{{ earning.hits }}</td>
+              <td>{{ earning.leads }}</td>
+              <td>{{ earning.money }}</td>
+{#              <td><a href="{% url 'dashboard:earning-delete' earning.id user.pk %}" onclick="return confirm('Are you sure?');"#}
+{#                       class="btn btn-block btn-danger">Delete</a></td>#}
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- /.card-body -->
+  </div>
+{% endblock content %}
+
+{% block sub_extra_script %}
+  <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
+  <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
+  <script>
+    $(function () {
+      $('#earnings-table').DataTable({
+        "paging": true,
+        "lengthChange": false,
+        "searching": false,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+      });
+    });
+  </script>
+{% endblock %}

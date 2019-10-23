@@ -17,6 +17,11 @@ class DashboardView(LoginRequiredMixin, ListView):
     model = User
     context_object_name = 'users'
 
+    def get(self, request, *args, **kwargs):
+        if not self.request.user.is_superuser:
+            return redirect("dashboard:status")
+        return super().get(request, *args, **kwargs)
+
     def get_queryset(self):
         return User.objects.exclude(email=self.request.user.email)
 
@@ -28,7 +33,7 @@ class UserDetailView(LoginRequiredMixin, TemplateView):
         customer = User.objects.get(pk=self.kwargs.get('pk'))
 
         context = self.get_context_data(**kwargs)
-        context['user'] = customer
+        context['customer'] = customer
         context['earnings'] = Earnings.objects.filter(customer=customer)
         context['payments'] = Payments.objects.filter(customer=customer)
         context['smart_links'] = SmartLinks.objects.filter(customer=customer)
@@ -152,21 +157,45 @@ class AffiliatesView(LoginRequiredMixin, FormMixin, ListView):
         return super(AffiliatesView, self).form_valid(form)
 
 
-class FinancesView(LoginRequiredMixin, CreateView):
-    success_url = '/dashboard/finances/'
-    template_name = 'dashboard/finances.html'
+class StatusView(LoginRequiredMixin, ListView):
+    success_url = '/dashboard/status/'
+    template_name = 'dashboard/status.html'
+    model = Earnings
+    context_object_name = 'earnings'
+    paginate_by = 30
+
+    def get_queryset(self):
+        return Earnings.objects.filter(customer=self.request.user)
 
 
-class MailRoomView(LoginRequiredMixin, CreateView):
-    success_url = '/dashboard/mail-room/'
-    template_name = 'dashboard/mail-room.html'
+class SmartLinksView(LoginRequiredMixin, ListView):
+    success_url = '/dashboard/smart-links/'
+    template_name = 'dashboard/smart-links.html'
+    model = SmartLinks
+    context_object_name = 'smart_links'
+    paginate_by = 30
+
+    def get_queryset(self):
+        return SmartLinks.objects.filter(customer=self.request.user)
 
 
-class ToolsView(LoginRequiredMixin, CreateView):
-    success_url = '/dashboard/tools/'
-    template_name = 'dashboard/tools.html'
+class PaymentsView(LoginRequiredMixin, ListView):
+    success_url = '/dashboard/payments/'
+    template_name = 'dashboard/payments.html'
+    model = Payments
+    context_object_name = 'payments'
+    paginate_by = 30
+
+    def get_queryset(self):
+        return Payments.objects.filter(customer=self.request.user)
 
 
-class AdministrationView(LoginRequiredMixin, CreateView):
-    success_url = '/dashboard/administration/'
-    template_name = 'dashboard/administration.html'
+class SupportView(LoginRequiredMixin, ListView):
+    success_url = '/dashboard/support/'
+    template_name = 'dashboard/support.html'
+    model = User
+    context_object_name = 'users'
+    paginate_by = 30
+
+    def get_queryset(self):
+        return User.objects.filter(is_superuser=True)

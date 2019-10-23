@@ -13,13 +13,13 @@
 {% endblock %}
 
 {% block content %}
-  {% if user %}
+  {% if customer %}
     <div class="row">
       <div class="card card-widget widget-user" style="width: 100%;">
         <!-- Add the bg color to the header using any of the bg-* classes -->
         <div class="widget-user-header bg-info">
-          <h3 class="widget-user-username">{{ user.get_full_name|default:"No Name" }}</h3>
-          <h5 class="widget-user-desc">{{ user.email }}</h5>
+          <h3 class="widget-user-username">{{ customer.get_full_name|default:"No Name" }}</h3>
+          <h5 class="widget-user-desc">{{ customer.email }}</h5>
         </div>
         <div class="widget-user-image">
           <img class="img-circle elevation-2" src="{% static 'img/user1-128x128.jpg' %}" alt="User Avatar">
@@ -116,7 +116,7 @@
                   <td>{{ earning.hits }}</td>
                   <td>{{ earning.leads }}</td>
                   <td>{{ earning.money }}</td>
-                  <td><a href="{% url 'dashboard:earning-delete' earning.id user.pk %}" onclick="return confirm('Are you sure?');"
+                  <td><a href="{% url 'dashboard:earning-delete' earning.id customer.pk %}" onclick="return confirm('Are you sure?');"
                            class="btn btn-block btn-danger">Delete</a></td>
                 </tr>
               {% endfor %}
@@ -192,7 +192,7 @@
                   <td>
                     <span class="badge {% if payment.status == 'paid' %}badge-info{% else %}badge-danger{% endif %}">{{ payment.status }}</span>
                   </td>
-                  <td><a href="{% url 'dashboard:payment-delete' payment.id user.pk %}" onclick="return confirm('Are you sure?');"
+                  <td><a href="{% url 'dashboard:payment-delete' payment.id customer.pk %}" onclick="return confirm('Are you sure?');"
                            class="btn btn-block btn-danger">Delete</a></td>
                 </tr>
               {% endfor %}

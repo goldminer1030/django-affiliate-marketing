@@ -61,7 +61,7 @@ class SignUpForm(forms.ModelForm):
 class NewUserForm(SignUpForm):
     is_superuser = forms.BooleanField(widget=forms.CheckboxInput(attrs={
         'class': 'form-check-label'
-    }))
+    }), required=False)
 
     class Meta:
         model = User

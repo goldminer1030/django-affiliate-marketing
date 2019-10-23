@@ -4,6 +4,7 @@
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
       <!-- Add icons to the links using the .nav-icon class
            with font-awesome or any other icon font library -->
+    {% if user.is_superuser %}
       <li class="nav-item">
         <a href="{% url 'dashboard:dashboard' %}" class="nav-link{% if active == 'Dashboard' %} active{% endif %}">
           <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -24,34 +25,35 @@
           <p>Affiliates</p>
         </a>
       </li>
+    {% else %}
+      <li class="nav-item">
+        <a href="{% url 'dashboard:status' %}" class="nav-link{% if active == 'Status' %} active{% endif %}">
+          <i class="nav-icon fas fa-tachometer-alt"></i>
+          <p>Status</p>
+        </a>
+      </li>
 
-{#      <li class="nav-item">#}
-{#        <a href="{% url 'dashboard:finances' %}" class="nav-link{% if active == 'Finances' %} active{% endif %}">#}
-{#          <i class="nav-icon fas fa-dollar-sign"></i>#}
-{#          <p>Finances</p>#}
-{#        </a>#}
-{#      </li>#}
-{##}
-{#      <li class="nav-item">#}
-{#        <a href="{% url 'dashboard:mail-room' %}" class="nav-link{% if active == 'Mail room' %} active{% endif %}">#}
-{#          <i class="nav-icon fas fa-envelope"></i>#}
-{#          <p>Mail room</p>#}
-{#        </a>#}
-{#      </li>#}
-{##}
-{#      <li class="nav-item">#}
-{#        <a href="{% url 'dashboard:tools' %}" class="nav-link{% if active == 'Tools' %} active{% endif %}">#}
-{#          <i class="nav-icon fas fa-wrench"></i>#}
-{#          <p>Tools</p>#}
-{#        </a>#}
-{#      </li>#}
-{##}
-{#      <li class="nav-item">#}
-{#        <a href="{% url 'dashboard:administration' %}" class="nav-link{% if active == 'Administration' %} active{% endif %}">#}
-{#          <i class="nav-icon fas fa-toolbox"></i>#}
-{#          <p>Administration</p>#}
-{#        </a>#}
-{#      </li>#}
+      <li class="nav-item">
+        <a href="{% url 'dashboard:smart-links' %}" class="nav-link{% if active == 'Smart Links' %} active{% endif %}">
+          <i class="nav-icon fas fa-star"></i>
+          <p>Smart Links</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{% url 'dashboard:payments' %}" class="nav-link{% if active == 'Payments' %} active{% endif %}">
+          <i class="nav-icon fas fa-toolbox"></i>
+          <p>Payments</p>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a href="{% url 'dashboard:support' %}" class="nav-link{% if active == 'Support' %} active{% endif %}">
+          <i class="nav-icon fas fa-envelope"></i>
+          <p>Support</p>
+        </a>
+      </li>
+    {% endif %}
 
     </ul>
   </nav>
