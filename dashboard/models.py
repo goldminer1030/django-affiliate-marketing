@@ -44,3 +44,20 @@ class SmartLinks(models.Model):
 
     class Meta:
         ordering = ['-id']
+
+
+class ContactInfo(models.Model):
+    customer = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='contact')
+
+    address = models.CharField(_('address'), max_length=255, null=True, blank=True)
+    email = models.EmailField(_('email address'), max_length=255, null=True, blank=True)
+    phone_number = models.CharField(_('phone number'), max_length=60, null=True, blank=True)
+    website = models.CharField(_('website'), max_length=255, null=True, blank=True)
+    skype = models.CharField(_('skype'), max_length=255, null=True, blank=True)
+    linkedin = models.CharField(_('linkedin'), max_length=255, null=True, blank=True)
+    instagram = models.CharField(_('instagram'), max_length=255, null=True, blank=True)
+    twitter = models.CharField(_('twitter'), max_length=255, null=True, blank=True)
+    facebook = models.CharField(_('facebook'), max_length=255, null=True, blank=True)
+
+    class Meta:
+        ordering = ['-id']

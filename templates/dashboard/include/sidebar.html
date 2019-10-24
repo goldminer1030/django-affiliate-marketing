@@ -25,6 +25,13 @@
           <p>Affiliates</p>
         </a>
       </li>
+
+      <li class="nav-item">
+        <a href="{% url 'dashboard:support' %}" class="nav-link{% if active == 'Support' %} active{% endif %}">
+          <i class="nav-icon fas fa-envelope"></i>
+          <p>Support</p>
+        </a>
+      </li>
     {% else %}
       <li class="nav-item">
         <a href="{% url 'dashboard:status' %}" class="nav-link{% if active == 'Status' %} active{% endif %}">
@@ -44,13 +51,6 @@
         <a href="{% url 'dashboard:payments' %}" class="nav-link{% if active == 'Payments' %} active{% endif %}">
           <i class="nav-icon fas fa-toolbox"></i>
           <p>Payments</p>
-        </a>
-      </li>
-
-      <li class="nav-item">
-        <a href="{% url 'dashboard:support' %}" class="nav-link{% if active == 'Support' %} active{% endif %}">
-          <i class="nav-icon fas fa-envelope"></i>
-          <p>Support</p>
         </a>
       </li>
     {% endif %}

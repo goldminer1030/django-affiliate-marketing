@@ -2,6 +2,12 @@
 
 {% load static %}
 
+{% block extrastyle %}
+  <link href="{% static 'plugins/toastr/toastr.min.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static 'plugins/simple-line-icons/css/simple-line-icons.css' %}" rel="stylesheet" type="text/css" />
+  <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
 {% block sidebar %}
 {% include "dashboard/include/sidebar.html" with active='Support' %}
 {% endblock %}
@@ -11,21 +17,130 @@
 {% endblock %}
 
 {% block content %}
-{% for user in users %}
-  {% if forloop.first %}<div class="row">{% endif %}
-  <div class="col-lg-4 col-md-6 col-sm-12">
-    <div class="info-box">
-      <span class="info-box-icon bg-info"><i class="far fa-user"></i></span>
 
-      <div class="info-box-content">
-        <span class="info-box-text">{{ user.get_full_name|default:"No Name" }}</span>
-        <span class="info-box-number">{{ user.email }}</span>
-        <span>{{ user.date_joined|timesince }}</span>
+  {% include "dashboard/include/_modal.html" %}
+
+  <div class="row">
+    <div class="col-xl-3 col-lg-2 col-md-1 col-sm-12"></div>
+    <div class="col-xl-6 col-lg-8 col-md-10 col-sm-12">
+      <div class="card card-widget widget-user">
+        <!-- Add the bg color to the header using any of the bg-* classes -->
+        <div class="widget-user-header bg-info">
+          <h3 class="widget-user-username">{{ user.get_full_name|default:"No Name" }}</h3>
+          <h5 class="widget-user-desc">{{ user.email }}</h5>
+        </div>
+        <div class="widget-user-image">
+          <img class="img-circle elevation-2" src="{% static 'img/user-pic-default.png' %}" alt="User Avatar">
+        </div>
+        <div class="card-footer">
+          <div class="contact-section">
+            {% for support in supports %}
+              <div class="edit-contact">
+                <button type="button" class="update-support float-right btn btn-block btn-info" data-id="{% url 'dashboard:update-support' support.pk %}">
+                  <span class="fa fa-pen"></span> Edit
+                </button>
+                <div class="clearfix"></div>
+              </div>
+              <div class="contact-info address">
+                <div class="icon text-info"><i class="icon-location-pin"></i></div>
+                <div class="description">
+                  <p class="{% if support.address is None %}empty-info{% endif %}">{{ support.address|default:"Address" }}</p>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <div class="contact-info email">
+                <div class="icon text-info"><i class="icon-envelope-letter"></i></div>
+                <div class="description">
+                  <a class="{% if support.email is None %}empty-info{% endif %}" href="mailto:{{ support.email|default:"" }}">{{ support.email|default:"E-mail" }}</a>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <div class="contact-info phone_number">
+                <div class="icon text-info"><i class="icon-call-out"></i></div>
+                <div class="description">
+                  <a class="{% if support.phone_number is None %}empty-info{% endif %}" href="tel:{{ support.phone_number|default:"" }}">{{ support.phone_number|default:"Phone" }}</a>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <div class="contact-info website">
+                <div class="icon text-info"><i class="icon-home"></i></div>
+                <div class="description">
+                  <a class="{% if support.website is None %}empty-info{% endif %}" href="{{ support.website|default:"" }}">{{ support.website|default:"Website" }}</a>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <div class="contact-info skype">
+                <div class="icon text-info"><i class="icon-social-skype"></i></div>
+                <div class="description">
+                  <a class="{% if support.skype is None %}empty-info{% endif %}" href="skype:{{ support.skype|default:"" }}?call">{{ support.skype|default:"Skype" }}</a></div>
+                <div class="clearfix"></div>
+              </div>
+
+              <div class="contact-info linkedin">
+                <div class="icon text-info"><i class="icon-social-linkedin"></i></div>
+                <div class="description">
+                  <a class="{% if support.linkedin is None %}empty-info{% endif %}" href="{{ support.linkedin|default:"" }}">{{ support.linkedin|default:"Linked In" }}</a>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <div class="contact-info instagram">
+                <div class="icon text-info"><i class="icon-social-instagram"></i></div>
+                <div class="description">
+                  <a class="{% if support.instagram is None %}empty-info{% endif %}" href="{{ support.instagram|default:"" }}">{{ support.instagram|default:"Instagram" }}</a>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <div class="contact-info twitter">
+                <div class="icon text-info"><i class="icon-social-twitter"></i></div>
+                <div class="description">
+                  <a class="{% if support.twitter is None %}empty-info{% endif %}" href="{{ support.twitter|default:"" }}">{{ support.twitter|default:"Twitter" }}</a>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+
+              <div class="contact-info facebook">
+                <div class="icon text-info"><i class="icon-social-facebook"></i></div>
+                <div class="description">
+                  <a class="{% if support.facebook is None %}empty-info{% endif %}" href="{{ support.facebook|default:"" }}">{{ support.facebook|default:"Facebook" }}</a>
+                </div>
+                <div class="clearfix"></div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
       </div>
     </div>
+    <div class="col-xl-3 col-lg-2 col-md-1 col-sm-12"></div>
   </div>
-  {% if forloop.counter|divisibleby:3 %}</div><div class="row">{% endif %}
-  {% if forloop.last %}</div>{% endif %}
-
-{% endfor %}
 {% endblock content %}
+
+{% block sub_extra_script %}
+  <script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
+  <script src="{% static 'plugins/jquery.bootstrap.modal.forms.min.js' %}"></script>
+  <script>
+    $(function () {
+      // Update support button
+      $(".update-support").each(function () {
+        $(this).modalForm({formURL: $(this).data('id')});
+      });
+    });
+  </script>
+
+  {% for message in messages %}
+    {% if message.tags == "info" %}
+        <script> toastr.info('{{message}}')</script>
+    {% elif message.tags == "error" %}
+        <script> toastr.error('{{message}}')</script>
+    {% elif message.tags == "warning" %}
+        <script> toastr.warning('{{message}}')</script>
+    {% elif message.tags == "success" %}
+        <script> toastr.success('{{message}}')</script>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

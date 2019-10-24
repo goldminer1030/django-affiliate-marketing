@@ -61,3 +61,30 @@ h4.small-title {
 .btn-join .btn-light-color {
   color: white;
 }
+
+.contact-section {
+  position: relative;
+}
+.contact-section .edit-contact {
+  position: absolute;
+  right: 0;
+  top: -50px;
+}
+.contact-section .icon {
+  float: left;
+  width: 40px;
+  font-size: 20px;
+}
+.contact-section .description {
+  float: left;
+  width: calc(100% - 40px);
+}
+.contact-section .contact-info {
+  margin: 10px 0;
+}
+.contact-section .description p {
+  margin-bottom: 0;
+}
+.contact-section .description .empty-info {
+  color: #aaaaaa;
+}

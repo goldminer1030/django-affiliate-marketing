@@ -2,7 +2,7 @@ from django.urls import path
 from .views import DashboardView, OffersView, AffiliatesView, PaymentsView, SupportView, \
     UserDetailView, StatusView, SmartLinksView, EarningsCreateView, EarningsUpdateView, EarningsDeleteView, \
     PaymentsCreateView, PaymentsUpdateView, PaymentsDeleteView, \
-    OffersCreateView, OffersUpdateView, OffersDeleteView
+    OffersCreateView, OffersUpdateView, OffersDeleteView, ContactInfoUpdateView
 
 
 app_name = 'dashboard'
@@ -28,5 +28,7 @@ urlpatterns = [
     path('status/', StatusView.as_view(), name='status'),
     path('smart-links/', SmartLinksView.as_view(), name='smart-links'),
     path('payments/', PaymentsView.as_view(), name='payments'),
+
     path('support/', SupportView.as_view(), name='support'),
+    path('support/update/<int:pk>', ContactInfoUpdateView.as_view(), name='update-support'),
 ]

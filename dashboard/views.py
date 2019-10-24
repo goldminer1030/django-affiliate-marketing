@@ -1,13 +1,12 @@
-from django.views.generic.edit import FormMixin, FormView
-from django.views.generic.base import TemplateView
+from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, BSModalDeleteView
 from common.mixins import LoginRequiredMixin
-from .models import SmartLinks, Earnings, Payments
-from .forms import SmartLinksForm, EarningsForm, PaymentsForm
+from .models import SmartLinks, Earnings, Payments, ContactInfo
+from .forms import SmartLinksForm, EarningsForm, PaymentsForm, ContactInfoForm
 from profiles.models import User
 from profiles.forms import NewUserForm
 
@@ -123,12 +122,14 @@ class PaymentsView(LoginRequiredMixin, ListView):
 class SupportView(LoginRequiredMixin, ListView):
     success_url = '/dashboard/support/'
     template_name = 'dashboard/support.html'
-    model = User
-    context_object_name = 'users'
-    paginate_by = 30
+    model = ContactInfo
+    context_object_name = 'supports'
 
     def get_queryset(self):
-        return User.objects.filter(is_superuser=True)
+        if ContactInfo.objects.filter(customer=self.request.user).count() == 0:
+            ContactInfo.objects.create(customer=self.request.user)
+
+        return ContactInfo.objects.filter(customer=self.request.user)
 
 
 class EarningsCreateView(BSModalCreateView):
@@ -232,3 +233,10 @@ class OffersDeleteView(BSModalDeleteView):
     success_message = 'A smart link has been deleted successfully'
     success_url = reverse_lazy('dashboard:offers')
 
+
+class ContactInfoUpdateView(BSModalUpdateView):
+    model = ContactInfo
+    template_name = 'dashboard/include/update-modal.html'
+    form_class = ContactInfoForm
+    success_message = 'Contact Info has been updated successfully'
+    success_url = reverse_lazy('dashboard:support')
