@@ -23,13 +23,15 @@
             <table id="smart-links-table" class="table table-bordered table-hover">
               <thead>
               <tr>
-                <th>Smart Link</th>
+                <th class="text-center" scope="col">#</th>
+                <th class="text-center" scope="col">Smart Link</th>
               </tr>
               </thead>
               <tbody>
               {% for smart_link in smart_links %}
                 <tr>
-                  <td>
+                  <td class="text-center" scope="row">{{ forloop.counter }}</td>
+                  <td class="text-center">
                     <a href="{{ smart_link.smart_link }}" target="_blank">{{ smart_link.smart_link }}</a>
                   </td>
                 </tr>

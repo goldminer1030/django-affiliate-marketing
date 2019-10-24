@@ -16,6 +16,6 @@ class SignupView(CreateView):
 def delete_user(request, pk):
     user = User.objects.get(id=pk)
     user.delete()
-    messages.success(request, 'Removed a user successfully.')
+    messages.success(request, 'An user has been deleted successfully.')
     return redirect("dashboard:affiliates")
 

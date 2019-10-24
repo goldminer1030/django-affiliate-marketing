@@ -11,6 +11,9 @@
 {% endblock %}
 
 {% block content %}
+
+  {% include "dashboard/include/_modal.html" %}
+
   {% if customer %}
     <div class="row">
       <div class="card card-widget widget-user" style="width: 100%;">
@@ -55,31 +58,6 @@
     </div>
 
     <div class="row">
-      <div class="modal fade" id="modal-new-earning">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <form action="{% url 'dashboard:new-earning' %}" method="post" role="form">{% csrf_token %}
-              <div class="modal-header">
-                <h4 class="modal-title">New Earning</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                {% include 'dashboard/include/bs4_form.html' with form=earnings_form %}
-              </div>
-              <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">Create</button>
-              </div>
-            </form>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-      <!-- /.modal -->
-
       <div class="card" style="width: 100%;">
         <div class="card-header">
           <h3 class="card-title">Earnings</h3>
@@ -87,7 +65,7 @@
           <div class="card-tools">
             <ul class="pagination pagination-sm float-right">
               <li class="page-item">
-                <a class="page-link" href="#" data-toggle="modal" data-target="#modal-new-earning">
+                <a class="create-earnings page-link" href="#">
                   <i class="fa fa-plus"></i> New
                 </a>
               </li>
@@ -100,22 +78,30 @@
             <table id="earnings-table" class="table table-bordered table-hover">
               <thead>
               <tr>
-                <th>Date</th>
-                <th>Hits</th>
-                <th>Leads</th>
-                <th>Money</th>
-                <th>Action</th>
+                <th class="text-center" scope="col">#</th>
+                <th class="text-center" scope="col">Date</th>
+                <th class="text-center" scope="col">Hits</th>
+                <th class="text-center" scope="col">Leads</th>
+                <th class="text-center" scope="col">Money</th>
+                <th class="text-center" scope="col">Action</th>
               </tr>
               </thead>
               <tbody>
               {% for earning in earnings %}
                 <tr>
-                  <td>{{ earning.earning_date }}</td>
-                  <td>{{ earning.hits }}</td>
-                  <td>{{ earning.leads }}</td>
-                  <td>$ {{ earning.money }}</td>
-                  <td><a href="{% url 'dashboard:earning-delete' earning.id customer.pk %}" onclick="return confirm('Are you sure?');"
-                           class="btn btn-block btn-danger">Delete</a></td>
+                  <td class="text-center" scope="row">{{ forloop.counter }}</td>
+                  <td class="text-center">{{ earning.earning_date }}</td>
+                  <td class="text-center">{{ earning.hits }}</td>
+                  <td class="text-center">{{ earning.leads }}</td>
+                  <td class="text-center">$ {{ earning.money }}</td>
+                  <td class="text-center">
+                    <button type="button" class="update-earnings btn btn-sm btn-primary" data-id="{% url 'dashboard:update-earning' earning.pk %}">
+                      <span class="fa fa-pen"></span>
+                    </button>
+                    <button type="button" class="delete-earnings btn btn-sm btn-danger" data-id="{% url 'dashboard:delete-earning' earning.pk %}">
+                      <span class="fa fa-trash"></span>
+                    </button>
+                  </td>
                 </tr>
               {% endfor %}
               </tbody>
@@ -127,31 +113,6 @@
     </div>
 
     <div class="row">
-      <div class="modal fade" id="modal-new-payment">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <form action="{% url 'dashboard:new-payment' %}" method="post" role="form">{% csrf_token %}
-              <div class="modal-header">
-                <h4 class="modal-title">New Payment</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                {% include 'dashboard/include/bs4_form.html' with form=payments_form %}
-              </div>
-              <div class="modal-footer justify-content-between">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary">Create</button>
-              </div>
-            </form>
-          </div>
-          <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-      </div>
-      <!-- /.modal -->
-
       <div class="card" style="width: 100%;">
         <div class="card-header">
           <h3 class="card-title">Payments</h3>
@@ -159,7 +120,7 @@
           <div class="card-tools">
             <ul class="pagination pagination-sm float-right">
               <li class="page-item">
-                <a class="page-link" href="#" data-toggle="modal" data-target="#modal-new-payment">
+                <a class="create-payments page-link" href="#">
                   <i class="fa fa-plus"></i> New
                 </a>
               </li>
@@ -172,26 +133,36 @@
             <table id="payments-table" class="table table-bordered table-hover">
               <thead>
               <tr>
-                <th>Invoice ID</th>
-                <th>Date</th>
-                <th>Type</th>
-                <th>Amounts</th>
-                <th>Status</th>
-                <th>Action</th>
+                <th class="text-center" scope="col">#</th>
+                <th class="text-center" scope="col">Invoice ID</th>
+                <th class="text-center" scope="col">Date</th>
+                <th class="text-center" scope="col">Type</th>
+                <th class="text-center" scope="col">Amounts</th>
+                <th class="text-center" scope="col">Status</th>
+                <th class="text-center" scope="col">Action</th>
               </tr>
               </thead>
               <tbody>
               {% for payment in payments %}
                 <tr>
-                  <td>{{ payment.invoice_id }}</td>
-                  <td>{{ payment.payment_date }}</td>
-                  <td>{{ payment.type }}</td>
-                  <td>$ {{ payment.amount }}</td>
-                  <td>
+                  <td class="text-center" scope="row">{{ forloop.counter }}</td>
+                  <td class="text-center">{{ payment.invoice_id }}</td>
+                  <td class="text-center">{{ payment.payment_date }}</td>
+                  <td class="text-center">{{ payment.type }}</td>
+                  <td class="text-center">$ {{ payment.amount }}</td>
+                  <td class="text-center">
                     <span class="badge {% if payment.status == 'paid' %}badge-info{% else %}badge-danger{% endif %}">{{ payment.status }}</span>
                   </td>
-                  <td><a href="{% url 'dashboard:payment-delete' payment.id customer.pk %}" onclick="return confirm('Are you sure?');"
-                           class="btn btn-block btn-danger">Delete</a></td>
+                  <td class="text-center">
+                    <button type="button" class="update-payments btn btn-sm btn-primary" data-id="{% url 'dashboard:update-payment' payment.pk %}">
+                      <span class="fa fa-pen"></span>
+                    </button>
+                    <button type="button" class="delete-payments btn btn-sm btn-danger" data-id="{% url 'dashboard:delete-payment' payment.pk %}">
+                      <span class="fa fa-trash"></span>
+                    </button>
+                  </td>
+{#                  <td><a href="{% url 'dashboard:payment-delete' payment.id customer.pk %}" onclick="return confirm('Are you sure?');"#}
+{#                           class="btn btn-block btn-danger">Delete</a></td>#}
                 </tr>
               {% endfor %}
               </tbody>
@@ -208,6 +179,7 @@
   <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
   <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
   <script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
+  <script src="{% static 'plugins/jquery.bootstrap.modal.forms.min.js' %}"></script>
   <script>
     $(function () {
       $('#earnings-table').DataTable({
@@ -226,12 +198,28 @@
         "info": true,
         "autoWidth": false,
       });
-      $('#id_earning_date').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm:ss'
-      })
-      $('#id_payment_date').datetimepicker({
-        format: 'YYYY-MM-DD HH:mm:ss'
-      })
+
+      // Create earnings button
+      $(".create-earnings").modalForm({formURL: "{% url 'dashboard:create-earning' %}"});
+      // Update earnings buttons
+      $(".update-earnings").each(function () {
+        $(this).modalForm({formURL: $(this).data('id')});
+      });
+      // Delete earnings buttons
+      $(".delete-earnings").each(function () {
+        $(this).modalForm({formURL: $(this).data('id')});
+      });
+
+      // Create payments button
+      $(".create-payments").modalForm({formURL: "{% url 'dashboard:create-payment' %}"});
+      // Update payments buttons
+      $(".update-payments").each(function () {
+        $(this).modalForm({formURL: $(this).data('id')});
+      });
+      // Delete payments buttons
+      $(".delete-payments").each(function () {
+        $(this).modalForm({formURL: $(this).data('id')});
+      });
     });
   </script>
 

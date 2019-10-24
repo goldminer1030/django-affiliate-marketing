@@ -21,21 +21,23 @@
         <table id="payments-table" class="table table-bordered table-hover">
           <thead>
           <tr>
-            <th>Invoice ID</th>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Amounts</th>
-            <th>Status</th>
+            <th class="text-center" scope="col">#</th>
+            <th class="text-center" scope="col">Invoice ID</th>
+            <th class="text-center" scope="col">Date</th>
+            <th class="text-center" scope="col">Type</th>
+            <th class="text-center" scope="col">Amounts</th>
+            <th class="text-center" scope="col">Status</th>
           </tr>
           </thead>
           <tbody>
           {% for payment in payments %}
             <tr>
-              <td>{{ payment.invoice_id }}</td>
-              <td>{{ payment.payment_date }}</td>
-              <td>{{ payment.type }}</td>
-              <td>$ {{ payment.amount }}</td>
-              <td>
+              <td class="text-center" scope="row">{{ forloop.counter }}</td>
+              <td class="text-center">{{ payment.invoice_id }}</td>
+              <td class="text-center">{{ payment.payment_date }}</td>
+              <td class="text-center">{{ payment.type }}</td>
+              <td class="text-center">$ {{ payment.amount }}</td>
+              <td class="text-center">
                 <span class="badge {% if payment.status == 'paid' %}badge-info{% else %}badge-danger{% endif %}">{{ payment.status }}</span>
               </td>
             </tr>

@@ -63,19 +63,21 @@
               <table id="users-table" class="table table-bordered table-hover">
                 <thead>
                 <tr>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Last Active</th>
-                  <th>Action</th>
+                  <th class="text-center" scope="col">#</th>
+                  <th class="text-center" scope="col">Name</th>
+                  <th class="text-center" scope="col">Email</th>
+                  <th class="text-center" scope="col">Last Active</th>
+                  <th class="text-center" scope="col">Action</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for user in users %}
                   <tr>
-                    <td>{{ user.get_full_name|default:"No Name" }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.date_joined|timesince }}</td>
-                    <td><a href="{% url 'profiles:user-delete' user.id %}" onclick="return confirm('Are you sure?');"
+                    <td class="text-center" scope="row">{{ forloop.counter }}</td>
+                    <td class="text-center">{{ user.get_full_name|default:"No Name" }}</td>
+                    <td class="text-center">{{ user.email }}</td>
+                    <td class="text-center">{{ user.date_joined|timesince }}</td>
+                    <td class="text-center"><a href="{% url 'profiles:user-delete' user.id %}" onclick="return confirm('Are you sure?');"
                            class="btn btn-block btn-danger">Delete</a></td>
                   </tr>
                 {% endfor %}

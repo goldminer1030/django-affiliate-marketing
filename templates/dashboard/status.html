@@ -21,19 +21,21 @@
         <table id="earnings-table" class="table table-bordered table-hover">
           <thead>
           <tr>
-            <th>Date</th>
-            <th>Hits</th>
-            <th>Leads</th>
-            <th>Money</th>
+            <th class="text-center" scope="col">#</th>
+            <th class="text-center" scope="col">Date</th>
+            <th class="text-center" scope="col">Hits</th>
+            <th class="text-center" scope="col">Leads</th>
+            <th class="text-center" scope="col">Money</th>
           </tr>
           </thead>
           <tbody>
           {% for earning in earnings %}
             <tr>
-              <td>{{ earning.earning_date }}</td>
-              <td>{{ earning.hits }}</td>
-              <td>{{ earning.leads }}</td>
-              <td>$ {{ earning.money }}</td>
+              <td class="text-center" scope="row">{{ forloop.counter }}</td>
+              <td class="text-center">{{ earning.earning_date }}</td>
+              <td class="text-center">{{ earning.hits }}</td>
+              <td class="text-center">{{ earning.leads }}</td>
+              <td class="text-center">$ {{ earning.money }}</td>
             </tr>
           {% endfor %}
           </tbody>

@@ -2,6 +2,7 @@ from django import forms
 from django.forms import widgets
 from django.utils.safestring import mark_safe
 from decimal import Decimal
+from bootstrap_modal_forms.forms import BSModalForm
 from .models import SmartLinks, Earnings, Payments
 from profiles.models import User
 
@@ -16,7 +17,7 @@ STATUS_CHOICES = [
 ]
 
 
-class SmartLinksForm(forms.ModelForm):
+class SmartLinksForm(BSModalForm):
     customer = forms.ModelChoiceField(queryset=User.objects.all().order_by('email'), widget=forms.Select(),
                                       empty_label=None)
 
@@ -32,20 +33,21 @@ class SmartLinksForm(forms.ModelForm):
 
 class DateTimePickerWidget(widgets.TextInput):
     def render(self, name, value, attrs=None, renderer=None):
-        return mark_safe(u'''<div class="input-group date" id="id_%s" data-target-input="nearest">
-        <div class="input-group-append" data-target="#id_%s" data-toggle="datetimepicker">
-        <span class="input-group-text"><i class="far fa-calendar-alt"></i></span></div>%s</div>''' %
-                         (name, name, super(DateTimePickerWidget, self).render(name, value, attrs)))
+        return mark_safe(u'''<div class="input-group date" id="id_%s" data-target-input="nearest">%s<div class=
+        "input-group-append" data-target="#id_%s" data-toggle="datetimepicker"><div class="input-group-text">
+        <i class="far fa-calendar-alt"></i></div></div></div>''' %
+                         (name, super(DateTimePickerWidget, self).render(name, value, attrs), name))
 
 
-class EarningsForm(forms.ModelForm):
+class EarningsForm(BSModalForm):
     customer = forms.ModelChoiceField(queryset=User.objects.all().order_by('email'), widget=forms.Select(),
                                       empty_label=None)
 
     earning_date = forms.DateTimeField(
         widget=DateTimePickerWidget(attrs={
-            'class': 'form-control',
-            'data-target': 'timepicker'
+            'class': 'form-control datetimepicker-input',
+            'id': 'earning_date',
+            'data-target': '#id_earning_date'
         })
     )
 
@@ -68,14 +70,15 @@ class EarningsForm(forms.ModelForm):
         fields = ('customer', 'earning_date', 'hits', 'leads', 'money')
 
 
-class PaymentsForm(forms.ModelForm):
+class PaymentsForm(BSModalForm):
     customer = forms.ModelChoiceField(queryset=User.objects.all().order_by('email'), widget=forms.Select(),
                                       empty_label=None)
 
     payment_date = forms.DateTimeField(
         widget=DateTimePickerWidget(attrs={
             'class': 'form-control',
-            'data-target': 'timepicker'
+            'id': 'payment_date',
+            'data-target': '#id_payment_date'
         })
     )
 

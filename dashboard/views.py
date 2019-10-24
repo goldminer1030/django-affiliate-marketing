@@ -1,9 +1,10 @@
-from django.views.generic.edit import CreateView, FormMixin, FormView
+from django.views.generic.edit import FormMixin, FormView
 from django.views.generic.base import TemplateView
 from django.views.generic.list import ListView
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, BSModalDeleteView
 from common.mixins import LoginRequiredMixin
 from .models import SmartLinks, Earnings, Payments
 from .forms import SmartLinksForm, EarningsForm, PaymentsForm
@@ -26,21 +27,23 @@ class DashboardView(LoginRequiredMixin, ListView):
         return User.objects.exclude(email=self.request.user.email)
 
 
-class UserDetailView(LoginRequiredMixin, TemplateView):
+class UserDetailView(LoginRequiredMixin, ListView):
     template_name = 'dashboard/user-detail.html'
+    model = Earnings
+    context_object_name = 'earnings'
 
-    def get(self, request, *args, **kwargs):
+    def get_context_data(self, **kwargs):
+        context = super(UserDetailView, self).get_context_data(**kwargs)
+
         customer = User.objects.get(pk=self.kwargs.get('pk'))
-
-        context = self.get_context_data(**kwargs)
         context['customer'] = customer
-        context['earnings'] = Earnings.objects.filter(customer=customer)
         context['payments'] = Payments.objects.filter(customer=customer)
         context['smart_links'] = SmartLinks.objects.filter(customer=customer)
-        context['earnings_form'] = EarningsForm(self.request.GET or None)
-        context['payments_form'] = PaymentsForm(self.request.GET or None)
+        return context
 
-        return self.render_to_response(context)
+    def get_queryset(self):
+        customer = User.objects.get(pk=self.kwargs.get('pk'))
+        return Earnings.objects.filter(customer=customer)
 
 
 class NewEarningView(FormView):
@@ -73,55 +76,12 @@ class NewPaymentView(FormView):
         return redirect(reverse_lazy('dashboard:user-detail', kwargs={'pk': request.POST.get('customer')}))
 
 
-class OffersView(LoginRequiredMixin, FormMixin, ListView):
+class OffersView(LoginRequiredMixin, ListView):
     success_url = '/dashboard/offers/'
     template_name = 'dashboard/offers.html'
     model = SmartLinks
     context_object_name = 'smart_links'
     paginate_by = 10
-
-    # form mixin
-    form_class = SmartLinksForm
-
-    def post(self, request, *args, **kwargs):
-        form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-    def form_valid(self, form):
-        try:
-            form.save()
-            messages.success(self.request, 'Added a new smart link successfully.')
-        except Exception as e:
-            messages.error(self.request, 'Unfortunately failed')
-        return super(OffersView, self).form_valid(form)
-
-    def form_invalid(self, form):
-        messages.error(self.request, form.errors)
-        return super(OffersView, self).form_valid(form)
-
-
-def delete_smart_link(request, pk):
-    smart_link = SmartLinks.objects.get(id=pk)
-    smart_link.delete()
-    messages.success(request, 'Removed a smart link successfully.')
-    return redirect("dashboard:offers")
-
-
-def earning_link(request, pk, slug):
-    earning = Earnings.objects.get(id=pk)
-    earning.delete()
-    messages.success(request, 'Removed an earning successfully.')
-    return redirect(reverse_lazy('dashboard:user-detail', kwargs={'pk': slug}))
-
-
-def payment_link(request, pk, slug):
-    payment = Payments.objects.get(id=pk)
-    payment.delete()
-    messages.success(request, 'Removed a payment successfully.')
-    return redirect(reverse_lazy('dashboard:user-detail', kwargs={'pk': slug}))
 
 
 class AffiliatesView(LoginRequiredMixin, FormMixin, ListView):
@@ -199,3 +159,70 @@ class SupportView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         return User.objects.filter(is_superuser=True)
+
+
+class EarningsCreateView(BSModalCreateView):
+    template_name = 'dashboard/include/create-modal.html'
+    form_class = EarningsForm
+    success_message = 'New earning has been created successfully'
+    success_url = reverse_lazy('dashboard:user-detail', kwargs={'pk': 10})
+
+
+class EarningsUpdateView(BSModalUpdateView):
+    model = Earnings
+    template_name = 'dashboard/include/update-modal.html'
+    form_class = EarningsForm
+    success_message = 'An earning has been updated successfully'
+    success_url = reverse_lazy('dashboard:user-detail', kwargs={'pk': 10})
+
+
+class EarningsDeleteView(BSModalDeleteView):
+    model = Earnings
+    template_name = 'dashboard/include/delete-modal.html'
+    success_message = 'An earning has been deleted successfully'
+    success_url = reverse_lazy('dashboard:user-detail', kwargs={'pk': 10})
+
+
+class PaymentsCreateView(BSModalCreateView):
+    template_name = 'dashboard/include/create-modal.html'
+    form_class = PaymentsForm
+    success_message = 'New payment has been created successfully'
+    success_url = reverse_lazy('dashboard:user-detail', kwargs={'pk': 10})
+
+
+class PaymentsUpdateView(BSModalUpdateView):
+    model = Payments
+    template_name = 'dashboard/include/update-modal.html'
+    form_class = PaymentsForm
+    success_message = 'A payment has been updated successfully'
+    success_url = reverse_lazy('dashboard:user-detail', kwargs={'pk': 10})
+
+
+class PaymentsDeleteView(BSModalDeleteView):
+    model = Payments
+    template_name = 'dashboard/include/delete-modal.html'
+    success_message = 'A payment has been deleted successfully'
+    success_url = reverse_lazy('dashboard:user-detail', kwargs={'pk': 10})
+
+
+class OffersCreateView(BSModalCreateView):
+    template_name = 'dashboard/include/create-modal.html'
+    form_class = SmartLinksForm
+    success_message = 'New smart link has been created successfully'
+    success_url = reverse_lazy('dashboard:offers')
+
+
+class OffersUpdateView(BSModalUpdateView):
+    model = SmartLinks
+    template_name = 'dashboard/include/update-modal.html'
+    form_class = SmartLinksForm
+    success_message = 'A smart link has been updated successfully'
+    success_url = reverse_lazy('dashboard:offers')
+
+
+class OffersDeleteView(BSModalDeleteView):
+    model = SmartLinks
+    template_name = 'dashboard/include/delete-modal.html'
+    success_message = 'A smart link has been deleted successfully'
+    success_url = reverse_lazy('dashboard:offers')
+

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'django.contrib.sites',
     'widget_tweaks',
+    'bootstrap_modal_forms',
 
     'common',
     'profiles',
