@@ -25,23 +25,30 @@
 
 <body class="layout-top-nav" style="height: auto;">
   <div class="wrapper">
-    <nav class="main-header navbar navbar-expand-md navbar-light navbar-white">
+    <nav class="main-header navbar navbar-expand-lg navbar-light navbar-white">
       <div class="container">
-        <a href="/" class="navbar-brand">
+        <a class="navbar-brand" href="/">
           <img src="{% static 'img/logo.png' %}" alt="Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
           <span class="brand-text font-weight-light">MummyMonetize</span>
         </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-alt"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse navbar-alt" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a href="{% url 'profiles:signup' %}" class="nav-item nav-link">Sign Up <span class="sr-only">(current)</span></a>
+            <a href="{% url 'profiles:auth_login' %}" class="nav-item nav-link">Log In</a>
+          </div>
+        </div>
 
-        <div class="collapse navbar-collapse order-3" id="navbarCollapse">
+        {% if user.is_authenticated %}
+        <div class="collapse navbar-collapse justify-content-end navbar-alt">
           <ul class="navbar-nav">
-            <li class="nav-item d-none d-sm-inline-block">
-              <a href="{% url 'profiles:signup' %}" class="nav-link">Sign Up</a>
-            </li>
-            <li class="nav-item d-none d-sm-inline-block">
-              <a href="{% url 'profiles:auth_login' %}" class="nav-link">Log In</a>
-            </li>
+            <a href="{% url 'profiles:auth_logout' %}" class="nav-item nav-link">Log Out</a>
           </ul>
         </div>
+        {% endif %}
       </div>
     </nav>
     {% block content %}
