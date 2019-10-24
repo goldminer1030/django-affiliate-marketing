@@ -3,8 +3,8 @@
 <html>
 <head>
   <meta charset="utf-8"/>
-  <title>{% block title %}{% endblock %}</title>
-  <meta name="description" content="Affiliate Marketing">
+  <title>MummyMonetize | {% block title %}{% endblock %}</title>
+  <meta name="description" content="MummyMonetize">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
 
   <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo.png' %}" />
@@ -35,18 +35,24 @@
                 aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
+
+        {% if user.is_authenticated %}
+        <div class="collapse navbar-collapse navbar-alt" id="navbarNavAltMarkup">
+          <div class="navbar-nav">
+            <a href="{% url 'dashboard:dashboard' %}" class="nav-item nav-link">Dashboard <span class="sr-only">(current)</span></a>
+          </div>
+        </div>
+        <div class="collapse navbar-collapse justify-content-end navbar-alt">
+          <ul class="navbar-nav">
+            <a href="{% url 'profiles:auth_logout' %}" class="nav-item nav-link">Log Out</a>
+          </ul>
+        </div>
+        {% else %}
         <div class="collapse navbar-collapse navbar-alt" id="navbarNavAltMarkup">
           <div class="navbar-nav">
             <a href="{% url 'profiles:signup' %}" class="nav-item nav-link">Sign Up <span class="sr-only">(current)</span></a>
             <a href="{% url 'profiles:auth_login' %}" class="nav-item nav-link">Log In</a>
           </div>
-        </div>
-
-        {% if user.is_authenticated %}
-        <div class="collapse navbar-collapse justify-content-end navbar-alt">
-          <ul class="navbar-nav">
-            <a href="{% url 'profiles:auth_logout' %}" class="nav-item nav-link">Log Out</a>
-          </ul>
         </div>
         {% endif %}
       </div>
