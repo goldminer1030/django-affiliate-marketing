@@ -78,7 +78,7 @@
                     <td class="text-center">{{ user.email }}</td>
                     <td class="text-center">{{ user.date_joined|timesince }}</td>
                     <td class="text-center"><a href="{% url 'profiles:user-delete' user.id %}" onclick="return confirm('Are you sure?');"
-                           class="btn btn-block btn-danger">Delete</a></td>
+                           class="btn btn-sm btn-danger"><span class="fa fa-trash"></span></a></td>
                   </tr>
                 {% endfor %}
                 </tbody>
