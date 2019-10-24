@@ -46,36 +46,6 @@ class UserDetailView(LoginRequiredMixin, ListView):
         return Earnings.objects.filter(customer=customer)
 
 
-class NewEarningView(FormView):
-    form_class = EarningsForm
-    template_name = 'dashboard/user-detail.html'
-
-    def post(self, request, *args, **kwargs):
-        earnings_form = self.form_class(request.POST)
-        if earnings_form.is_valid():
-            earnings_form.save()
-            messages.success(self.request, 'Added a new earning successfully.')
-        else:
-            messages.error(self.request, earnings_form.errors)
-
-        return redirect(reverse_lazy('dashboard:user-detail', kwargs={'pk': request.POST.get('customer')}))
-
-
-class NewPaymentView(FormView):
-    form_class = PaymentsForm
-    template_name = 'dashboard/user-detail.html'
-
-    def post(self, request, *args, **kwargs):
-        payment_form = self.form_class(request.POST)
-        if payment_form.is_valid():
-            payment_form.save()
-            messages.success(self.request, 'Added a new payment successfully.')
-        else:
-            messages.error(self.request, payment_form.errors)
-
-        return redirect(reverse_lazy('dashboard:user-detail', kwargs={'pk': request.POST.get('customer')}))
-
-
 class OffersView(LoginRequiredMixin, ListView):
     success_url = '/dashboard/offers/'
     template_name = 'dashboard/offers.html'
@@ -165,7 +135,13 @@ class EarningsCreateView(BSModalCreateView):
     template_name = 'dashboard/include/create-modal.html'
     form_class = EarningsForm
     success_message = 'New earning has been created successfully'
-    success_url = reverse_lazy('dashboard:user-detail', kwargs={'pk': 10})
+
+    def get_success_url(self):
+        if 'slug' in self.kwargs:
+            slug = self.kwargs['slug']
+        else:
+            slug = 0
+        return reverse_lazy('dashboard:user-detail', kwargs={'pk': slug})
 
 
 class EarningsUpdateView(BSModalUpdateView):
@@ -173,21 +149,39 @@ class EarningsUpdateView(BSModalUpdateView):
     template_name = 'dashboard/include/update-modal.html'
     form_class = EarningsForm
     success_message = 'An earning has been updated successfully'
-    success_url = reverse_lazy('dashboard:user-detail', kwargs={'pk': 10})
+
+    def get_success_url(self):
+        if 'slug' in self.kwargs:
+            slug = self.kwargs['slug']
+        else:
+            slug = 0
+        return reverse_lazy('dashboard:user-detail', kwargs={'pk': slug})
 
 
 class EarningsDeleteView(BSModalDeleteView):
     model = Earnings
     template_name = 'dashboard/include/delete-modal.html'
     success_message = 'An earning has been deleted successfully'
-    success_url = reverse_lazy('dashboard:user-detail', kwargs={'pk': 10})
+
+    def get_success_url(self):
+        if 'slug' in self.kwargs:
+            slug = self.kwargs['slug']
+        else:
+            slug = 0
+        return reverse_lazy('dashboard:user-detail', kwargs={'pk': slug})
 
 
 class PaymentsCreateView(BSModalCreateView):
     template_name = 'dashboard/include/create-modal.html'
     form_class = PaymentsForm
     success_message = 'New payment has been created successfully'
-    success_url = reverse_lazy('dashboard:user-detail', kwargs={'pk': 10})
+
+    def get_success_url(self):
+        if 'slug' in self.kwargs:
+            slug = self.kwargs['slug']
+        else:
+            slug = 0
+        return reverse_lazy('dashboard:user-detail', kwargs={'pk': slug})
 
 
 class PaymentsUpdateView(BSModalUpdateView):
@@ -195,14 +189,26 @@ class PaymentsUpdateView(BSModalUpdateView):
     template_name = 'dashboard/include/update-modal.html'
     form_class = PaymentsForm
     success_message = 'A payment has been updated successfully'
-    success_url = reverse_lazy('dashboard:user-detail', kwargs={'pk': 10})
+
+    def get_success_url(self):
+        if 'slug' in self.kwargs:
+            slug = self.kwargs['slug']
+        else:
+            slug = 0
+        return reverse_lazy('dashboard:user-detail', kwargs={'pk': slug})
 
 
 class PaymentsDeleteView(BSModalDeleteView):
     model = Payments
     template_name = 'dashboard/include/delete-modal.html'
     success_message = 'A payment has been deleted successfully'
-    success_url = reverse_lazy('dashboard:user-detail', kwargs={'pk': 10})
+
+    def get_success_url(self):
+        if 'slug' in self.kwargs:
+            slug = self.kwargs['slug']
+        else:
+            slug = 0
+        return reverse_lazy('dashboard:user-detail', kwargs={'pk': slug})
 
 
 class OffersCreateView(BSModalCreateView):
