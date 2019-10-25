@@ -60,6 +60,25 @@
     <div class="row">
       <div class="card" style="width: 100%;">
         <div class="card-header">
+          <h3 class="card-title">Balance: <strong class="text-info">$ {{ customer.get_balance|default:'0'|floatformat:2 }}</strong></h3>
+
+          <div class="card-tools">
+            <ul class="pagination pagination-sm float-right">
+              <li class="page-item">
+                <a class="update-balance page-link" href="#" data-id="{% url 'dashboard:update-balance' customer.balance.pk customer.pk %}">
+                  <i class="fa fa-pen"></i> Edit
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- /.card-header -->
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="card" style="width: 100%;">
+        <div class="card-header">
           <h3 class="card-title">Earnings</h3>
 
           <div class="card-tools">
@@ -195,6 +214,11 @@
         "ordering": true,
         "info": true,
         "autoWidth": false,
+      });
+
+      // Update balance buttons
+      $(".update-balance").each(function () {
+        $(this).modalForm({formURL: $(this).data('id')});
       });
 
       // Create earnings button

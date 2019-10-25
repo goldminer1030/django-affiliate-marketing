@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.utils.translation import ugettext as _
+from decimal import Decimal
 
 
 class Earnings(models.Model):
@@ -76,6 +77,14 @@ class SupportManager(models.Model):
     phone_number = models.CharField(_('phone number'), max_length=60)
     skype = models.CharField(_('skype'), max_length=255, null=True, blank=True)
     website = models.CharField(_('website'), max_length=255, null=True, blank=True)
+
+    class Meta:
+        ordering = ['-id']
+
+
+class Balance(models.Model):
+    customer = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='balance')
+    balance = models.DecimalField(_('Balance'), max_digits=6, default=Decimal('0.00'), decimal_places=2)
 
     class Meta:
         ordering = ['-id']

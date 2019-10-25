@@ -4,7 +4,8 @@ from django.db import models
 from django.db.models import Sum
 from django.utils import timezone
 from django.utils.translation import ugettext as _
-from dashboard.models import Earnings
+from dashboard.models import Balance
+from decimal import Decimal
 
 
 class UserManager(BaseUserManager):
@@ -79,7 +80,10 @@ class User(AbstractBaseUser):
         return u"{0} {1}".format(self.first_name, self.last_name).strip() or self.email
 
     def get_balance(self):
-        return Earnings.objects.filter(customer=self).aggregate(Sum('money'))['money__sum']
+        if Balance.objects.filter(customer=self).count() == 0:
+            Balance.objects.create(customer=self, balance=Decimal('0.00'))
+
+        return Balance.objects.filter(customer=self).aggregate(Sum('balance'))['balance__sum']
 
     def get_short_name(self):
         return self.first_name or self.email.split('@')[0]

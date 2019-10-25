@@ -3,7 +3,7 @@ from .views import DashboardView, OffersView, AffiliatesView, PaymentsView, Supp
     UserDetailView, StatusView, SmartLinksView, EarningsCreateView, EarningsUpdateView, EarningsDeleteView, \
     PaymentsCreateView, PaymentsUpdateView, PaymentsDeleteView, \
     OffersCreateView, OffersUpdateView, OffersDeleteView, \
-    SupportManagerView, SupportManagerCreateView, SupportManagerUpdateView, SupportManagerDeleteView
+    SupportManagerView, SupportManagerCreateView, SupportManagerUpdateView, SupportManagerDeleteView, BalanceUpdateView
 
 
 app_name = 'dashboard'
@@ -25,6 +25,8 @@ urlpatterns = [
     path('payment/create/<slug:slug>', PaymentsCreateView.as_view(), name='create-payment'),
     path('payment/update/<int:pk>-<slug:slug>', PaymentsUpdateView.as_view(), name='update-payment'),
     path('payment/delete/<int:pk>-<slug:slug>', PaymentsDeleteView.as_view(), name='delete-payment'),
+
+    path('balance/update/<int:pk>-<slug:slug>', BalanceUpdateView.as_view(), name='update-balance'),
 
     path('status/', StatusView.as_view(), name='status'),
     path('smart-links/', SmartLinksView.as_view(), name='smart-links'),

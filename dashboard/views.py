@@ -5,8 +5,8 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, BSModalDeleteView
 from common.mixins import LoginRequiredMixin
-from .models import SmartLinks, Earnings, Payments, SupportManager
-from .forms import SmartLinksForm, EarningsForm, PaymentsForm, SupportManagerForm
+from .models import SmartLinks, Earnings, Payments, SupportManager, Balance
+from .forms import SmartLinksForm, EarningsForm, PaymentsForm, SupportManagerForm, BalanceForm
 from profiles.models import User
 from profiles.forms import NewUserForm
 
@@ -255,3 +255,18 @@ class SupportManagerDeleteView(BSModalDeleteView):
     template_name = 'dashboard/include/delete-modal.html'
     success_message = 'A smart link has been deleted successfully'
     success_url = reverse_lazy('dashboard:support-manager')
+
+
+class BalanceUpdateView(BSModalUpdateView):
+    model = Balance
+    template_name = 'dashboard/include/update-modal.html'
+    form_class = BalanceForm
+    success_message = 'Balance has been updated successfully'
+    success_url = reverse_lazy('dashboard:support-manager')
+
+    def get_success_url(self):
+        if 'slug' in self.kwargs:
+            slug = self.kwargs['slug']
+        else:
+            slug = 0
+        return reverse_lazy('dashboard:user-detail', kwargs={'pk': slug})
