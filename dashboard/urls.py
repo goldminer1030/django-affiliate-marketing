@@ -2,7 +2,8 @@ from django.urls import path
 from .views import DashboardView, OffersView, AffiliatesView, PaymentsView, SupportView, \
     UserDetailView, StatusView, SmartLinksView, EarningsCreateView, EarningsUpdateView, EarningsDeleteView, \
     PaymentsCreateView, PaymentsUpdateView, PaymentsDeleteView, \
-    OffersCreateView, OffersUpdateView, OffersDeleteView, ContactInfoUpdateView
+    OffersCreateView, OffersUpdateView, OffersDeleteView, \
+    SupportManagerView, SupportManagerCreateView, SupportManagerUpdateView, SupportManagerDeleteView
 
 
 app_name = 'dashboard'
@@ -30,5 +31,8 @@ urlpatterns = [
     path('payments/', PaymentsView.as_view(), name='payments'),
 
     path('support/', SupportView.as_view(), name='support'),
-    path('support/update/<int:pk>', ContactInfoUpdateView.as_view(), name='update-support'),
+    path('support-manager/', SupportManagerView.as_view(), name='support-manager'),
+    path('support-manager/create/', SupportManagerCreateView.as_view(), name='create-support-manager'),
+    path('support-manager/update/<int:pk>', SupportManagerUpdateView.as_view(), name='update-support-manager'),
+    path('support-manager/delete/<int:pk>', SupportManagerDeleteView.as_view(), name='delete-support-manager'),
 ]

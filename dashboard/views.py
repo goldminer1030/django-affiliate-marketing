@@ -5,8 +5,8 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, BSModalDeleteView
 from common.mixins import LoginRequiredMixin
-from .models import SmartLinks, Earnings, Payments, ContactInfo
-from .forms import SmartLinksForm, EarningsForm, PaymentsForm, ContactInfoForm
+from .models import SmartLinks, Earnings, Payments, SupportManager
+from .forms import SmartLinksForm, EarningsForm, PaymentsForm, SupportManagerForm
 from profiles.models import User
 from profiles.forms import NewUserForm
 
@@ -122,14 +122,8 @@ class PaymentsView(LoginRequiredMixin, ListView):
 class SupportView(LoginRequiredMixin, ListView):
     success_url = '/dashboard/support/'
     template_name = 'dashboard/support.html'
-    model = ContactInfo
+    model = SupportManager
     context_object_name = 'supports'
-
-    def get_queryset(self):
-        if ContactInfo.objects.filter(customer=self.request.user).count() == 0:
-            ContactInfo.objects.create(customer=self.request.user)
-
-        return ContactInfo.objects.filter(customer=self.request.user)
 
 
 class EarningsCreateView(BSModalCreateView):
@@ -234,9 +228,30 @@ class OffersDeleteView(BSModalDeleteView):
     success_url = reverse_lazy('dashboard:offers')
 
 
-class ContactInfoUpdateView(BSModalUpdateView):
-    model = ContactInfo
+class SupportManagerView(LoginRequiredMixin, ListView):
+    success_url = '/dashboard/support-manager/'
+    template_name = 'dashboard/support-manager.html'
+    model = SupportManager
+    context_object_name = 'supports'
+
+
+class SupportManagerCreateView(BSModalCreateView):
+    template_name = 'dashboard/include/create-modal.html'
+    form_class = SupportManagerForm
+    success_message = 'New support manager has been created successfully'
+    success_url = reverse_lazy('dashboard:support-manager')
+
+
+class SupportManagerUpdateView(BSModalUpdateView):
+    model = SupportManager
     template_name = 'dashboard/include/update-modal.html'
-    form_class = ContactInfoForm
-    success_message = 'Contact Info has been updated successfully'
-    success_url = reverse_lazy('dashboard:support')
+    form_class = SupportManagerForm
+    success_message = 'A support manager has been updated successfully'
+    success_url = reverse_lazy('dashboard:support-manager')
+
+
+class SupportManagerDeleteView(BSModalDeleteView):
+    model = SupportManager
+    template_name = 'dashboard/include/delete-modal.html'
+    success_message = 'A smart link has been deleted successfully'
+    success_url = reverse_lazy('dashboard:support-manager')

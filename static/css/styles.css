@@ -62,29 +62,37 @@ h4.small-title {
   color: white;
 }
 
+.support-manager .avatar {
+  float: left;
+  width: 115px;
+}
+.support-manager .avatar img {
+  max-width: 100px;
+}
+.support-manager .avatar .button-group {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+.support-manager .contact-section {
+  float: left;
+  width: calc(100% - 115px);
+}
 .contact-section {
   position: relative;
 }
-.contact-section .edit-contact {
-  position: absolute;
-  right: 0;
-  top: -50px;
+.contact-section .contact-name {
+  font-size: 20px;
+  font-weight: 700;
 }
 .contact-section .icon {
   float: left;
-  width: 40px;
+  width: 30px;
   font-size: 20px;
 }
 .contact-section .description {
   float: left;
-  width: calc(100% - 40px);
-}
-.contact-section .contact-info {
-  margin: 10px 0;
+  width: calc(100% - 30px);
 }
 .contact-section .description p {
   margin-bottom: 0;
-}
-.contact-section .description .empty-info {
-  color: #aaaaaa;
 }

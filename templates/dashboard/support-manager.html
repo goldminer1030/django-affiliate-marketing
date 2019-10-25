@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block extrastyle %}
+  <link href="{% static 'plugins/toastr/toastr.min.css' %}" rel="stylesheet" type="text/css" />
   <link href="{% static 'plugins/simple-line-icons/css/simple-line-icons.css' %}" rel="stylesheet" type="text/css" />
   <link href="{% static 'css/styles.css' %}" rel="stylesheet" type="text/css" />
 {% endblock %}
@@ -16,9 +17,22 @@
 {% endblock %}
 
 {% block content %}
+
+  {% include "dashboard/include/_modal.html" %}
+
   <div class="card">
     <div class="card-header">
       <h3 class="card-title">Support managers</h3>
+
+      <div class="card-tools">
+        <ul class="pagination pagination-sm float-right">
+          <li class="page-item">
+            <a class="create-support-manager page-link" href="#">
+              <i class="fa fa-plus"></i> New
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
     <!-- /.card-header -->
     <div class="card-body">
@@ -31,9 +45,21 @@
             <div class="avatar">
               <div class="avatar-wrapper">
                 <img src="{% static "img/" %}user-{{ support.avatar }}.jpg" alt="User Avatar" class="img-circle">
+
+                <div class="action mt-2 mr-3">
+                  <div class="button-group text-center">
+                    <button type="button" class="update-support-manager btn btn-sm text-primary" title="Edit profile"
+                            data-id="{% url 'dashboard:update-support-manager' support.pk %}">
+                      <span class="fa fa-pen"></span>
+                    </button>
+                    <button type="button" class="delete-support-manager btn btn-sm text-danger" title="Delete"
+                            data-id="{% url 'dashboard:delete-support-manager' support.pk %}">
+                      <span class="fa fa-trash"></span>
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-
             <div class="contact-section">
               <div class="contact-info contact-name">{{ support.name }}</div>
 
@@ -83,3 +109,34 @@
     <!-- /.card-body -->
   </div>
 {% endblock content %}
+
+{% block sub_extra_script %}
+  <script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
+  <script src="{% static 'plugins/jquery.bootstrap.modal.forms.min.js' %}"></script>
+  <script>
+    $(function () {
+      // Create support manager button
+      $(".create-support-manager").modalForm({formURL: "{% url 'dashboard:create-support-manager' %}"});
+      // Update support manager buttons
+      $(".update-support-manager").each(function () {
+        $(this).modalForm({formURL: $(this).data('id')});
+      });
+      // Delete support manager buttons
+      $(".delete-support-manager").each(function () {
+        $(this).modalForm({formURL: $(this).data('id')});
+      });
+    });
+  </script>
+
+  {% for message in messages %}
+    {% if message.tags == "info" %}
+        <script> toastr.info('{{message}}')</script>
+    {% elif message.tags == "error" %}
+        <script> toastr.error('{{message}}')</script>
+    {% elif message.tags == "warning" %}
+        <script> toastr.warning('{{message}}')</script>
+    {% elif message.tags == "success" %}
+        <script> toastr.success('{{message}}')</script>
+    {% endif %}
+  {% endfor %}
+{% endblock %}

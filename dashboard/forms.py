@@ -3,7 +3,7 @@ from django.forms import widgets
 from django.utils.safestring import mark_safe
 from decimal import Decimal
 from bootstrap_modal_forms.forms import BSModalForm
-from .models import SmartLinks, Earnings, Payments, ContactInfo
+from .models import SmartLinks, Earnings, Payments, SupportManager
 from profiles.models import User
 
 TYPE_CHOICES = [
@@ -100,8 +100,7 @@ class PaymentsForm(BSModalForm):
         fields = ('customer', 'payment_date', 'invoice_id', 'type', 'amount', 'status')
 
 
-class ContactInfoForm(BSModalForm):
+class SupportManagerForm(BSModalForm):
     class Meta:
-        model = ContactInfo
-        fields = ('address', 'email', 'phone_number', 'website',
-                  'skype', 'linkedin', 'instagram', 'twitter', 'facebook')
+        model = SupportManager
+        fields = ('name', 'email', 'avatar', 'phone_number', 'skype', 'website')
