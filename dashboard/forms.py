@@ -106,6 +106,12 @@ class SupportManagerForm(BSModalForm):
         fields = ('name', 'email', 'avatar', 'phone_number', 'skype', 'website')
 
 
+class UserForm(BSModalForm):
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name', 'is_active', 'is_superuser')
+
+
 class BalanceForm(BSModalForm):
     class Meta:
         model = Balance

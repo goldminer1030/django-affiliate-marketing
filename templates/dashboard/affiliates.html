@@ -15,30 +15,8 @@
 {% endblock %}
 
 {% block content %}
-  <div class="modal fade" id="modal-new-user">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-        <form method="post" role="form">{% csrf_token %}
-          <div class="modal-header">
-            <h4 class="modal-title">New User</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            {% include 'dashboard/include/bs4_form.html' with form=form %}
-          </div>
-          <div class="modal-footer justify-content-between">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-            <button type="submit" class="btn btn-primary">Create</button>
-          </div>
-        </form>
-      </div>
-      <!-- /.modal-content -->
-    </div>
-    <!-- /.modal-dialog -->
-  </div>
-  <!-- /.modal -->
+
+  {% include "dashboard/include/_modal.html" %}
 
     <div class="card">
       <div class="card-header">
@@ -47,7 +25,7 @@
         <div class="card-tools">
           <ul class="pagination pagination-sm float-right">
             <li class="page-item">
-              <a class="page-link" href="#" data-toggle="modal" data-target="#modal-new-user">
+              <a class="create-user page-link" href="#">
                 <i class="fa fa-plus"></i> New
               </a>
             </li>
@@ -67,6 +45,8 @@
                   <th class="text-center" scope="col">Name</th>
                   <th class="text-center" scope="col">Email</th>
                   <th class="text-center" scope="col">Last Active</th>
+                  <th class="text-center" scope="col">Type</th>
+                  <th class="text-center" scope="col">Activated</th>
                   <th class="text-center" scope="col">Action</th>
                 </tr>
                 </thead>
@@ -77,8 +57,28 @@
                     <td class="text-center">{{ user.get_full_name|default:"No Name" }}</td>
                     <td class="text-center">{{ user.email }}</td>
                     <td class="text-center">{{ user.date_joined|timesince }}</td>
-                    <td class="text-center"><a href="{% url 'profiles:user-delete' user.id %}" onclick="return confirm('Are you sure?');"
-                           class="btn btn-sm btn-danger"><span class="fa fa-trash"></span></a></td>
+                    <td class="text-center">
+                      {% if user.is_superuser %}
+                        <span class="text-danger">Administrator</span>
+                      {% else %}
+                        <span class="text-info">Customer</span>
+                      {% endif %}
+                    </td>
+                    <td class="text-center">
+                      {% if user.is_active %}
+                        <span class="badge badge-info">YES</span>
+                      {% else %}
+                        <span class="badge badge-danger">NO</span>
+                      {% endif %}
+                    </td>
+                    <td class="text-center">
+                      <button type="button" class="update-user btn btn-sm btn-primary" data-id="{% url 'dashboard:update-user' user.pk %}">
+                        <span class="fa fa-pen"></span>
+                      </button>
+                      <button type="button" class="delete-user btn btn-sm btn-danger" data-id="{% url 'dashboard:delete-user' user.pk %}">
+                        <span class="fa fa-trash"></span>
+                      </button>
+                    </td>
                   </tr>
                 {% endfor %}
                 </tbody>
@@ -95,6 +95,7 @@
   <script src="{% static 'plugins/datatables/jquery.dataTables.js' %}"></script>
   <script src="{% static 'plugins/datatables-bs4/js/dataTables.bootstrap4.js' %}"></script>
   <script src="{% static 'plugins/toastr/toastr.min.js' %}"></script>
+  <script src="{% static 'plugins/jquery.bootstrap.modal.forms.min.js' %}"></script>
   <script>
     $(function () {
       $('#users-table').DataTable({
@@ -104,6 +105,17 @@
         "ordering": true,
         "info": true,
         "autoWidth": false,
+      });
+
+      // Create user button
+      $(".create-user").modalForm({formURL: "{% url 'dashboard:create-user' %}"});
+      // Update user buttons
+      $(".update-user").each(function () {
+        $(this).modalForm({formURL: $(this).data('id')});
+      });
+      // Delete user buttons
+      $(".delete-user").each(function () {
+        $(this).modalForm({formURL: $(this).data('id')});
       });
     });
   </script>

@@ -45,14 +45,14 @@ class User(AbstractBaseUser):
     )
     is_active = models.BooleanField(
         _('active'),
-        default=True,
+        default=False,
         help_text=_('Designates whether this user should be treated as active. '
                     'Unselect this instead of deleting accounts.')
     )
 
     is_superuser = models.BooleanField(
         _('Is superuser?'),
-        default=True,
+        default=False,
         help_text=_('Designates that this user has all permissions without explicitly assigning them.')
     )
     date_joined = models.DateTimeField(_('date joined'), default=timezone.now)

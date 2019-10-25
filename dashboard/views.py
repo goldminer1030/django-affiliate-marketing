@@ -1,14 +1,11 @@
-from django.views.generic.edit import FormMixin
 from django.views.generic.list import ListView
-from django.contrib import messages
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, BSModalDeleteView
 from common.mixins import LoginRequiredMixin
 from .models import SmartLinks, Earnings, Payments, SupportManager, Balance
-from .forms import SmartLinksForm, EarningsForm, PaymentsForm, SupportManagerForm, BalanceForm
+from .forms import SmartLinksForm, EarningsForm, PaymentsForm, SupportManagerForm, BalanceForm, UserForm
 from profiles.models import User
-from profiles.forms import NewUserForm
 
 
 class DashboardView(LoginRequiredMixin, ListView):
@@ -53,37 +50,11 @@ class OffersView(LoginRequiredMixin, ListView):
     paginate_by = 10
 
 
-class AffiliatesView(LoginRequiredMixin, FormMixin, ListView):
+class AffiliatesView(LoginRequiredMixin, ListView):
     success_url = '/dashboard/affiliates/'
     template_name = 'dashboard/affiliates.html'
     model = User
     context_object_name = 'users'
-    paginate_by = 10
-
-    # form mixin
-    form_class = NewUserForm
-
-    def get_queryset(self):
-        return User.objects.exclude(email=self.request.user.email)
-
-    def post(self, request, *args, **kwargs):
-        form = self.get_form()
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-    def form_valid(self, form):
-        try:
-            form.save()
-            messages.success(self.request, 'Added a new user successfully.')
-        except Exception as e:
-            messages.error(self.request, 'Unfortunately failed')
-        return super(AffiliatesView, self).form_valid(form)
-
-    def form_invalid(self, form):
-        messages.error(self.request, form.errors)
-        return super(AffiliatesView, self).form_valid(form)
 
 
 class StatusView(LoginRequiredMixin, ListView):
@@ -204,6 +175,28 @@ class PaymentsDeleteView(BSModalDeleteView):
         else:
             slug = 0
         return reverse_lazy('dashboard:user-detail', kwargs={'pk': slug})
+
+
+class UserCreateView(BSModalCreateView):
+    template_name = 'dashboard/include/create-modal.html'
+    form_class = UserForm
+    success_message = 'New user has been created successfully'
+    success_url = reverse_lazy('dashboard:affiliates')
+
+
+class UserUpdateView(BSModalUpdateView):
+    model = User
+    template_name = 'dashboard/include/update-modal.html'
+    form_class = UserForm
+    success_message = 'An user has been updated successfully'
+    success_url = reverse_lazy('dashboard:affiliates')
+
+
+class UserDeleteView(BSModalDeleteView):
+    model = User
+    template_name = 'dashboard/include/delete-modal.html'
+    success_message = 'An user has been deleted successfully'
+    success_url = reverse_lazy('dashboard:affiliates')
 
 
 class OffersCreateView(BSModalCreateView):

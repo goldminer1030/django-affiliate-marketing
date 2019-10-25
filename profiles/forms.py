@@ -49,10 +49,12 @@ class SignUpForm(forms.ModelForm):
     def save(self, commit=True):
         user = super(SignUpForm, self).save(commit=False)
         user.set_password(self.cleaned_data["password"])
-        print("form save 3rd")
-        print("send email")
         if commit:
-            print('1 commit-save')
+            # check if there is super user
+            if User.objects.filter(is_superuser=True).count() == 0:
+                user.is_superuser = True
+                user.is_active = True
+                print('%s %s is a super-user' % (user.first_name, user.last_name))
             user.save()
 
         return user
@@ -136,11 +138,13 @@ class LoginForm(forms.Form):
     """
     username = forms.EmailField(
         max_length=100,
-        widget=forms.TextInput(attrs={'class': 'form-control m-input', 'placeholder': 'Email', 'autofocus': True, 'autocomplete': 'off'}),
+        widget=forms.TextInput(attrs={'class': 'form-control m-input', 'placeholder': 'Email',
+                                      'autofocus': True, 'autocomplete': 'off'}),
     )
     password = forms.CharField(
         strip=False,
-        widget=forms.PasswordInput(attrs={'class': 'form-control m-input m-login__form-input--last', 'placeholder': 'Password'})
+        widget=forms.PasswordInput(attrs={'class': 'form-control m-input m-login__form-input--last',
+                                          'placeholder': 'Password'})
     )
 
     error_messages = {
@@ -148,7 +152,7 @@ class LoginForm(forms.Form):
             "Please enter a correct %(email)s and password. Note that both "
             "fields may be case-sensitive."
         ),
-        'inactive': _("This account is inactive."),
+        'inactive': _("This account is inactive. Please contact with affiliate manager to approve this account."),
     }
 
     def __init__(self, request=None, *args, **kwargs):
@@ -167,12 +171,19 @@ class LoginForm(forms.Form):
         if username is not None and password:
             self.user_cache = authenticate(self.request, username=username, password=password)
             if self.user_cache is None:
+                try:
+                    user_temp = User.objects.get(email=username)
+                except:
+                    user_temp = None
 
-                raise forms.ValidationError(
-                    self.error_messages['invalid_login'],
-                    code='invalid_login',
-                    params={'email': 'Email Address'},
-                )
+                if user_temp is not None and user_temp.check_password(password):
+                    self.confirm_login_allowed(user_temp)
+                else:
+                    raise forms.ValidationError(
+                        self.error_messages['invalid_login'],
+                        code='invalid_login',
+                        params={'email': 'Email Address'},
+                    )
             else:
                 self.confirm_login_allowed(self.user_cache)
 
